@@ -1,6 +1,6 @@
 import {app} from "./app";
 import {SETTINGS} from "./setting";
-import {disconnectDb, runDb} from "./db/mongoDb";
+import {runDb} from "./db/mongoDb";
 
 const startApp = async () => {
 

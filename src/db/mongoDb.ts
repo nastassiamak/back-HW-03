@@ -2,7 +2,6 @@ import {Collection, MongoClient} from 'mongodb';
 import {BlogBbType} from "./blog-db-type";
 import {PostDBType} from "./post-db-type";
 
-
 let client: MongoClient;
 export let blogsCollection: Collection<BlogBbType>;
 export let postsCollection: Collection<PostDBType>;
@@ -69,6 +68,22 @@ export async function runDb(url: string): Promise<boolean> {
         return false;
     }
 }
+export async function clearDb(): Promise<void> {
+    try {
+        if (blogsCollection) {
+            await blogsCollection.deleteMany({}); // Удаляем все документы из коллекции блогов
+            console.log("Все блоги были удалены из коллекции.");
+        }
+
+        if (postsCollection) {
+            await postsCollection.deleteMany({}); // Удаляем все документы из коллекции постов
+            console.log("Все посты были удалены из коллекции.");
+        }
+    } catch (err) {
+        console.error("Ошибка при очистке базы данных:", err);
+    }
+}
+
 
 // Функция для отключения от базы данных
     export async function disconnectDb(): Promise<void> {
