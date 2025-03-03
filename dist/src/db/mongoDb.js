@@ -1,0 +1,81 @@
+"use strict";
+var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, generator) {
+    function adopt(value) { return value instanceof P ? value : new P(function (resolve) { resolve(value); }); }
+    return new (P || (P = Promise))(function (resolve, reject) {
+        function fulfilled(value) { try { step(generator.next(value)); } catch (e) { reject(e); } }
+        function rejected(value) { try { step(generator["throw"](value)); } catch (e) { reject(e); } }
+        function step(result) { result.done ? resolve(result.value) : adopt(result.value).then(fulfilled, rejected); }
+        step((generator = generator.apply(thisArg, _arguments || [])).next());
+    });
+};
+Object.defineProperty(exports, "__esModule", { value: true });
+exports.postsCollection = exports.blogsCollection = void 0;
+exports.runDb = runDb;
+exports.disconnectDb = disconnectDb;
+const mongodb_1 = require("mongodb");
+let client;
+function runDb(url) {
+    return __awaiter(this, void 0, void 0, function* () {
+        console.log("Запуск функции runDb");
+        // Проверка на undefined
+        if (!url) {
+            throw new Error("Строка подключения не определена. Пожалуйста, проверьте переменные окружения.");
+        }
+        client = new mongodb_1.MongoClient(url);
+        try {
+            yield client.connect();
+            const db = client.db("blogs-platform");
+            exports.blogsCollection = db.collection('blogs-collection');
+            exports.postsCollection = db.collection('posts-collection');
+            // Пример создания документа (блога)
+            const newBlog = {
+                id: new Date().toISOString() + Math.random(),
+                name: 'n11111',
+                description: 'd11111',
+                websiteUrl: 'http://example111111.com',
+                createdAt: new Date().toISOString(),
+                isMembership: false,
+            };
+            const result = yield exports.blogsCollection.insertOne(newBlog); // Добавляем документ в коллекцию
+            // Проверка результата вставки
+            if (result.insertedId) {
+                console.log(`Документ создан с _id: ${result.insertedId}`);
+            }
+            else {
+                console.log("Документ не был добавлен.");
+            }
+            // **Добавляем код для вывода существующих баз данных и коллекций**
+            const databasesList = yield client.db().admin().listDatabases();
+            console.log("Доступные базы данных:");
+            databasesList.databases.forEach(db => console.log(` - ${db.name}`));
+            const collections = yield db.listCollections().toArray();
+            console.log("Существующие коллекции в базе данных:", collections);
+            // Проверка, что коллеция действительно создана
+            const blogs = yield exports.blogsCollection.find().toArray();
+            console.log("Блоги в коллекции:", blogs); // Здесь должен быть ваш блог
+            if (blogs.length === 0) {
+                console.log("Коллекция пуста или не была создана.");
+            }
+            else {
+                console.log("Документы в коллекции успешно загружены.");
+            }
+            yield db.command({ ping: 1 });
+            console.log("Database Connected");
+            return true;
+        }
+        catch (err) {
+            console.error("Database connection error:", err);
+            yield client.close();
+            return false;
+        }
+    });
+}
+// Функция для отключения от базы данных
+function disconnectDb() {
+    return __awaiter(this, void 0, void 0, function* () {
+        if (client) {
+            yield client.close();
+            console.log("Database Disconnected");
+        }
+    });
+}

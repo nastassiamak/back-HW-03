@@ -1,0 +1,18 @@
+"use strict";
+Object.defineProperty(exports, "__esModule", { value: true });
+exports.postsRouter = void 0;
+const express_1 = require("express");
+const createPostController_1 = require("./controllers/createPostController");
+const getPostsController_1 = require("./controllers/getPostsController");
+const delPostController_1 = require("./controllers/delPostController");
+const admin_middleware_1 = require("../../global_middlewares/admin-middleware");
+const postValidators_1 = require("./postValidators");
+const findPostController_1 = require("./controllers/findPostController");
+const putPostController_1 = require("./controllers/putPostController");
+const inputCheckErrorsMiddleware_1 = require("../../global_middlewares/inputCheckErrorsMiddleware");
+exports.postsRouter = (0, express_1.Router)();
+exports.postsRouter.get('/', getPostsController_1.getPostsController);
+exports.postsRouter.post('/', ...postValidators_1.postValidators, createPostController_1.createPostController);
+exports.postsRouter.delete('/:id', admin_middleware_1.adminMiddleware, inputCheckErrorsMiddleware_1.inputCheckErrorsMiddleware, delPostController_1.delPostController);
+exports.postsRouter.get('/:id', postValidators_1.findPostValidator, findPostController_1.findPostController);
+exports.postsRouter.put('/:id', postValidators_1.findPostValidator, ...postValidators_1.postValidators, putPostController_1.putPostController);
