@@ -11,6 +11,7 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.postsCollection = exports.blogsCollection = void 0;
 exports.runDb = runDb;
+exports.clearDb = clearDb;
 exports.disconnectDb = disconnectDb;
 const mongodb_1 = require("mongodb");
 let client;
@@ -67,6 +68,23 @@ function runDb(url) {
             console.error("Database connection error:", err);
             yield client.close();
             return false;
+        }
+    });
+}
+function clearDb() {
+    return __awaiter(this, void 0, void 0, function* () {
+        try {
+            if (exports.blogsCollection) {
+                yield exports.blogsCollection.deleteMany({}); // Удаляем все документы из коллекции блогов
+                console.log("Все блоги были удалены из коллекции.");
+            }
+            if (exports.postsCollection) {
+                yield exports.postsCollection.deleteMany({}); // Удаляем все документы из коллекции постов
+                console.log("Все посты были удалены из коллекции.");
+            }
+        }
+        catch (err) {
+            console.error("Ошибка при очистке базы данных:", err);
         }
     });
 }

@@ -21,7 +21,6 @@ exports.blogsRepository = {
                 throw new Error("blogsCollection не инициализирована.");
             }
             const newBlog = {
-                //_id: new ObjectId(),
                 id: new Date().toISOString() + Math.random(),
                 name: blog.name,
                 description: blog.description,

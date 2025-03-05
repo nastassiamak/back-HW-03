@@ -4,7 +4,7 @@ import {NextFunction} from "express";
 import {validationResult} from "express-validator";
 import {HTTP_STATUSES} from "../db/db";
 
-export const inputCheckErrorsMiddleware = (req: Request,
+export const inputCheckErrorsMiddleware = async (req: Request,
                                            res: Response<OutputErrorsType>, next: NextFunction) => {
     const e = validationResult(req)
     if (!e.isEmpty()) {

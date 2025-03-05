@@ -15,7 +15,7 @@ export const blogsRepository = {
         }
 
         const newBlog: BlogBbType = {
-            //_id: new ObjectId(),
+
             id: new Date().toISOString() + Math.random(),
             name: blog.name,
             description: blog.description,
