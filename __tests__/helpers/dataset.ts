@@ -35,7 +35,7 @@ export const blog5: BlogBbType = {
     description: 'description5',
     websiteUrl: 'http://example5.com',
     createdAt: new Date().toISOString(),
-    isMembership: false
+    isMembership: true
 } as const // dataset нельзя изменять
 
 export const blog6: BlogBbType = {
@@ -44,7 +44,7 @@ export const blog6: BlogBbType = {
     description: 'description6',
     websiteUrl: 'http://example6.com',
     createdAt: new Date().toISOString(),
-    isMembership: false
+    isMembership: true
 } as const // dataset нельзя изменять
 
 export const post1: PostDBType ={

@@ -32,6 +32,7 @@ export async function runDb(url: string): Promise<boolean> {
             isMembership: false,
         };
 
+
        const result = await blogsCollection.insertOne(newBlog); // Добавляем документ в коллекцию
         // Проверка результата вставки
         if (result.insertedId) {

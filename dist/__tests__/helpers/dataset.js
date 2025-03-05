@@ -27,7 +27,7 @@ exports.blog5 = {
     description: 'description5',
     websiteUrl: 'http://example5.com',
     createdAt: new Date().toISOString(),
-    isMembership: false
+    isMembership: true
 }; // dataset нельзя изменять
 exports.blog6 = {
     id: new Date().toISOString() + Math.random(),
@@ -35,7 +35,7 @@ exports.blog6 = {
     description: 'description6',
     websiteUrl: 'http://example6.com',
     createdAt: new Date().toISOString(),
-    isMembership: false
+    isMembership: true
 }; // dataset нельзя изменять
 exports.post1 = {
     id: new Date().toISOString() + Math.random(),

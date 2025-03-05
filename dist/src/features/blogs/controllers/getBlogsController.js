@@ -14,8 +14,13 @@ const db_1 = require("../../../db/db");
 const blogsRepository_1 = require("../blogsRepository");
 const getBlogsController = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     const blogs = yield blogsRepository_1.blogsRepository.getAll(); // получаем базы данных
-    res
-        .status(db_1.HTTP_STATUSES.OK_200)
-        .json(blogs); // отдаём видео в качестве ответа
+    if (!blogs) {
+        res.status(db_1.HTTP_STATUSES.NOT_FOUND_404);
+    }
+    else {
+        res
+            .status(db_1.HTTP_STATUSES.OK_200)
+            .json(blogs); // отдаём видео в качестве ответа
+    }
 });
 exports.getBlogsController = getBlogsController;

@@ -9,7 +9,7 @@ import {MongoClient} from "mongodb";
 import {blogsCollection, disconnectDb, runDb} from "../src/db/mongoDb";
 
 let mongoServer: MongoMemoryServer;
-let client: MongoClient
+//let client: MongoClient
 
 describe('/blogs', () => {
     beforeAll(async () => {
@@ -31,10 +31,13 @@ describe('/blogs', () => {
 
     it('should create', async () => {
 
-        const newBlog: BlogInputModel = {
+        const newBlog = {
             name: 'n1',
             description: 'd1',
             websiteUrl: 'http://some.com',
+            createdAt: new Date().toISOString(),
+            isMembership: true,
+
         }
 
         const res = await req
@@ -43,12 +46,7 @@ describe('/blogs', () => {
             .send(newBlog) // отправка данных
             .expect(HTTP_STATUSES.CREATED_201)
 
-        console.log(res.body)
-        //
-        // // Проверяем, что объект не пустой и что он возвращает правильные значения
-        // expect(res.body.name).toEqual(newBlog.name);
-        // expect(res.body.description).toEqual(newBlog.description);
-        // expect(res.body.websiteUrl).toEqual(newBlog.websiteUrl);
+        //console.log(res.body)
 
         // Находим созданный блог в коллекции
         const createdBlog = await blogsCollection.findOne({ id: res.body.id });
@@ -60,6 +58,8 @@ describe('/blogs', () => {
             expect(createdBlog.name).toEqual(newBlog.name);
             expect(createdBlog.description).toEqual(newBlog.description);
             expect(createdBlog.websiteUrl).toEqual(newBlog.websiteUrl);
+            expect(createdBlog.createdAt).toMatch(/^\d{4}-\d{2}-\d{2}T\d{2}:\d{2}:\d{2}\.\d{3}Z$/);
+            expect(createdBlog.isMembership).toEqual(newBlog.isMembership);
         }
     });
 
@@ -85,10 +85,12 @@ describe('/blogs', () => {
 
     it('shouldn\'t create', async () => {
         await blogsCollection.deleteMany({}); // Очищаем коллекцию перед каждым тестом
-        const newBlog: BlogInputModel = {
+        const newBlog = {
             name: createString(16),
             description: createString(501),
             websiteUrl: createString(101),
+            createdAt: new Date().toISOString(),
+            isMembership: true,
         }
 
         const res = await req
@@ -118,7 +120,7 @@ describe('/blogs', () => {
             .expect(HTTP_STATUSES.OK_200) // проверяем наличие эндпоинта
 
         console.log(res.body) // можно посмотреть ответ эндпоинта
-        const blogsInDb = await blogsCollection.find({}).toArray();
+        const blogsInDb = await blogsCollection.find().toArray();
         expect(blogsInDb.length).toEqual(0) // проверяем ответ эндпоинта
     })
 
@@ -192,17 +194,19 @@ describe('/blogs', () => {
 
          console.log(res.body)
         // // Проверяем состояние базы данных
-        // const blogsInDb = await blogsCollection.find({}).toArray();
-        // console.log('Blogs in DB:', blogsInDb); // Логируем состояние базы данных
-        // expect(blogsInDb.length).toEqual(0); // Утверждаем, что длина равна 0
+        const blogsInDb = await blogsCollection.find({}).toArray();
+        console.log('Blogs in DB:', blogsInDb); // Логируем состояние базы данных
+        expect(blogsInDb.length).toEqual(0); // Утверждаем, что длина равна 0
     })
 
     it('should update', async () => {
        // setDB(dataset1)
-        const blog: BlogInputModel = {
+        const blog = {
             name: 'n2',
             description: 'd2',
             websiteUrl: 'http://some2.com',
+            createdAt: new Date().toISOString(),
+            isMembership: true,
         }
 
         const res = await req
@@ -226,10 +230,12 @@ describe('/blogs', () => {
 
     it('shouldn\'t update 404', async () => {
       //setDB()
-        const blog: BlogInputModel = {
+        const blog = {
             name: 'n1',
             description: 'd1',
             websiteUrl: 'http://some.com',
+            createdAt: new Date().toISOString(),
+            isMembership: true,
         }
 
         const res = await req

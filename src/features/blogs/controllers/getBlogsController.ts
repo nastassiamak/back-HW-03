@@ -6,9 +6,12 @@ import {blogsRepository} from "../blogsRepository";
 
 export const getBlogsController = async (req: Request,
                                    res: Response<BlogViewModel[]>) => {
-    const blogs =  await blogsRepository.getAll()// получаем базы данных
-
-    res
-        .status(HTTP_STATUSES.OK_200)
-        .json(blogs) // отдаём видео в качестве ответа
+    const blogs = await blogsRepository.getAll()// получаем базы данных
+    if (!blogs) {
+        res.status(HTTP_STATUSES.NOT_FOUND_404)
+    } else {
+        res
+            .status(HTTP_STATUSES.OK_200)
+            .json(blogs) // отдаём видео в качестве ответа
+    }
 }

@@ -21,7 +21,7 @@ export const blogsRepository = {
             description: blog.description,
             websiteUrl: blog.websiteUrl,
             createdAt: new Date().toISOString(),
-            isMembership: false,
+            isMembership: true,
         }
 
         const res = await blogsCollection.insertOne(newBlog);
@@ -36,13 +36,13 @@ export const blogsRepository = {
 
 
     async findAndMap(id: string) {
-        const blog = await this.find(id);// использовать этот метод если проверили существование
-        return blog ? this.map(blog) : undefined
+        const blogs = await this.find(id);// использовать этот метод если проверили существование
+        return blogs ? this.map(blogs) : undefined
     },
 
     //Этот метод должен возвращать все блоги.
     async getAll(){
-      return await blogsCollection.find({}).toArray();
+      return await blogsCollection.find().toArray();
     },
 
     //Метод для удаления блога по ID.

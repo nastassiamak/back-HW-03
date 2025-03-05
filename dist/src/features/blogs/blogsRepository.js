@@ -26,7 +26,7 @@ exports.blogsRepository = {
                 description: blog.description,
                 websiteUrl: blog.websiteUrl,
                 createdAt: new Date().toISOString(),
-                isMembership: false,
+                isMembership: true,
             };
             const res = yield mongoDb_1.blogsCollection.insertOne(newBlog);
             return newBlog;
@@ -41,14 +41,14 @@ exports.blogsRepository = {
     },
     findAndMap(id) {
         return __awaiter(this, void 0, void 0, function* () {
-            const blog = yield this.find(id); // использовать этот метод если проверили существование
-            return blog ? this.map(blog) : undefined;
+            const blogs = yield this.find(id); // использовать этот метод если проверили существование
+            return blogs ? this.map(blogs) : undefined;
         });
     },
     //Этот метод должен возвращать все блоги.
     getAll() {
         return __awaiter(this, void 0, void 0, function* () {
-            return yield mongoDb_1.blogsCollection.find({}).toArray();
+            return yield mongoDb_1.blogsCollection.find().toArray();
         });
     },
     //Метод для удаления блога по ID.

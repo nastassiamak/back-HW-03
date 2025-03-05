@@ -9,8 +9,13 @@ export const createBlogController = async (req: Request<any, any, BlogInputModel
     const newBlogId = await blogsRepository.create(req.body)
 
     const newBlog = await blogsRepository.findAndMap(newBlogId.id)
-
-    res
-        .status(HTTP_STATUSES.CREATED_201)
-        .json(newBlog)
+    if(!newBlog){
+        res
+            .status(HTTP_STATUSES.BAD_REQUEST_400)
+    } else {
+        res
+            .status(HTTP_STATUSES.CREATED_201)
+            .json(newBlog)
+    }
+    console.log(newBlog)
 }

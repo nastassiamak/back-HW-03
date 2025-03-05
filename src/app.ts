@@ -5,12 +5,14 @@ import {blogsRouter} from "./features/blogs/blogsRouter";
 import {testingRouter} from "./features/testing";
 import {postsRouter} from "./features/posts/postsRouter";
 import {HTTP_STATUSES} from "./db/db";
+import morgan from 'morgan';
 
 export const app = express() // создать приложение
 
 //console.log('Аргументы командной строки:', process.argv); // Вывод аргументов
 app.use(express.json()) // создание свойств-объектов body и query во всех реквестах
 app.use(cors()) // разрешить любым фронтам делать запросы на наш бэк
+app.use(morgan('dev')); // Использует формат 'dev', который выводит короткие логи, удобные для разработки
 
 
 app.get('/', (req, res) => {

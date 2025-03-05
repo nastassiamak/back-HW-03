@@ -11,10 +11,12 @@ const blogsRouter_1 = require("./features/blogs/blogsRouter");
 const testing_1 = require("./features/testing");
 const postsRouter_1 = require("./features/posts/postsRouter");
 const db_1 = require("./db/db");
+const morgan_1 = __importDefault(require("morgan"));
 exports.app = (0, express_1.default)(); // создать приложение
 //console.log('Аргументы командной строки:', process.argv); // Вывод аргументов
 exports.app.use(express_1.default.json()); // создание свойств-объектов body и query во всех реквестах
 exports.app.use((0, cors_1.default)()); // разрешить любым фронтам делать запросы на наш бэк
+exports.app.use((0, morgan_1.default)('dev')); // Использует формат 'dev', который выводит короткие логи, удобные для разработки
 exports.app.get('/', (req, res) => {
     // эндпоинт, который будет показывать на верселе какая версия бэкэнда сейчас залита
     res.status(db_1.HTTP_STATUSES.OK_200).json({ version: '1.0' });
