@@ -22,25 +22,6 @@ export async function runDb(url: string): Promise<boolean> {
         blogsCollection = db.collection<BlogBbType>('blogs-collection');
         postsCollection = db.collection<PostDBType>('posts-collection');
 
-        // Пример создания документа (блога)
-        const newBlog: BlogBbType = {
-            id: new Date().toISOString() + Math.random(),
-            name: 'n11111',
-            description: 'd11111',
-            websiteUrl: 'http://example111111.com',
-            createdAt: new Date().toISOString(),
-            isMembership: false,
-        };
-
-
-       const result = await blogsCollection.insertOne(newBlog); // Добавляем документ в коллекцию
-        // Проверка результата вставки
-        if (result.insertedId) {
-            console.log(`Документ создан с _id: ${result.insertedId}`);
-        } else {
-            console.log("Документ не был добавлен.");
-        }
-
         // **Добавляем код для вывода существующих баз данных и коллекций**
         const databasesList = await client.db().admin().listDatabases();
         console.log("Доступные базы данных:");
