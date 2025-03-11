@@ -7,7 +7,7 @@ import {DBType} from "../../src/db/db";
 import {SETTINGS} from "../../src/setting";
 import {fromUTF8ToBase64} from "../../src/global_middlewares/admin-middleware";
 import {PostDBType} from "../../src/db/post-db-type";
-import {ObjectId} from "mongodb";
+
 
 export const codedAuth = fromUTF8ToBase64(SETTINGS.ADMIN)
 

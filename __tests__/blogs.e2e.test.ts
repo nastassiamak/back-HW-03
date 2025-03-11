@@ -6,7 +6,7 @@ import {codedAuth, createString, dataset1} from "./helpers/dataset";
 import {req} from "./helpers/test-helpers";
 import {MongoMemoryServer} from "mongodb-memory-server";
 import {MongoClient} from "mongodb";
-import {blogsCollection, disconnectDb, runDb} from "../src/db/mongoDb";
+import {blogsCollection, clearDb, disconnectDb, runDb} from "../src/db/mongoDb";
 
 let mongoServer: MongoMemoryServer;
 //let client: MongoClient
@@ -24,7 +24,7 @@ describe('/blogs', () => {
     });
 
     beforeEach(async () => {
-        await blogsCollection.deleteMany({}); // Очищаем коллекцию перед каждым тестом
+        await clearDb();
         // Заполняем коллекцию начальными данными
         await blogsCollection.insertMany(dataset1.blogs);
     });
