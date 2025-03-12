@@ -90,7 +90,7 @@ describe('/blogs', () => {
             description: createString(501),
             websiteUrl: createString(101),
             createdAt: new Date().toISOString(),
-            isMembership: true,
+            isMembership: false,
         }
 
         const res = await req
@@ -99,12 +99,13 @@ describe('/blogs', () => {
             .send(newBlog) // отправка данных
             .expect(HTTP_STATUSES.BAD_REQUEST_400)
 
-        //console.log(res.body)
+        console.log(res.body)
 
         expect(res.body.errorsMessages.length).toEqual(3)
         expect(res.body.errorsMessages[0].field).toEqual('name')
         expect(res.body.errorsMessages[1].field).toEqual('description')
         expect(res.body.errorsMessages[2].field).toEqual('websiteUrl')
+
 
         //проверка что в базе данных нет блогов
         const blogsInDb = await blogsCollection.find(res.body).toArray();
