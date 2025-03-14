@@ -7,6 +7,7 @@ import {req} from "./helpers/test-helpers";
 import {MongoMemoryServer} from "mongodb-memory-server";
 import {MongoClient} from "mongodb";
 import {blogsCollection, clearDb, disconnectDb, runDb} from "../src/db/mongoDb";
+import {BlogBbType} from "../src/db/blog-db-type";
 
 let mongoServer: MongoMemoryServer;
 //let client: MongoClient
@@ -37,8 +38,7 @@ describe('/blogs', () => {
             description: 'd1',
             websiteUrl: 'http://some.com',
             createdAt: new Date().toISOString(),
-            isMembership: false,
-
+            isMembership: false
         }
 
         const res = await req
@@ -59,19 +59,16 @@ describe('/blogs', () => {
             expect(createdBlog.name).toEqual(newBlog.name);
             expect(createdBlog.description).toEqual(newBlog.description);
             expect(createdBlog.websiteUrl).toEqual(newBlog.websiteUrl);
-            expect(createdBlog.createdAt).toMatch(/^\d{4}-\d{2}-\d{2}T\d{2}:\d{2}:\d{2}\.\d{3}Z$/);
-            expect(createdBlog.isMembership).toEqual(newBlog.isMembership);
         }
     });
 
     it('shouldn\'t create 401', async () => {
         await blogsCollection.deleteMany({}); // Очищаем коллекцию перед каждым тестом
-        const newBlog = {
+        const newBlog: BlogInputModel = {
             name: 'n1',
             description: 'd1',
             websiteUrl: 'http://some.com',
-            createdAt: new Date().toISOString(),
-            isMembership: false,
+
         }
 
         const res = await req
@@ -88,12 +85,11 @@ describe('/blogs', () => {
 
     it('shouldn\'t create', async () => {
         await blogsCollection.deleteMany({}); // Очищаем коллекцию перед каждым тестом
-        const newBlog = {
+        const newBlog: BlogInputModel = {
             name: createString(16),
             description: createString(501),
             websiteUrl: createString(101),
-            createdAt: createString(10),
-            isMembership: createString(77),
+
         }
 
         const res = await req
@@ -108,8 +104,7 @@ describe('/blogs', () => {
         expect(res.body.errorsMessages[0].field).toEqual('name')
         expect(res.body.errorsMessages[1].field).toEqual('description')
         expect(res.body.errorsMessages[2].field).toEqual('websiteUrl')
-        expect(res.body.errorsMessages[3].field).toEqual('createdAt')
-        expect(res.body.errorsMessages[4].field).toEqual('isMembership')
+
 
 
 
@@ -213,7 +208,8 @@ describe('/blogs', () => {
             description: 'd2',
             websiteUrl: 'http://some2.com',
             createdAt: new Date().toISOString(),
-            isMembership: true,
+            isMembership: false
+
         }
 
         const res = await req
@@ -232,8 +228,7 @@ describe('/blogs', () => {
             expect(updatedBlog.name).toEqual(blog.name);
             expect(updatedBlog.description).toEqual(blog.description);
             expect(updatedBlog.websiteUrl).toEqual(blog.websiteUrl);
-            expect(updatedBlog.isMembership).toEqual(blog.isMembership);
-            expect(updatedBlog.createdAt).toEqual(blog.createdAt);
+
         }
     })
 

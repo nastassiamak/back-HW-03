@@ -8,7 +8,7 @@ export const blogsRepository = {
     //Этот метод создает новый блог. Он принимает объект BlogInputModel, создает новый объект BlogDbType,
     //добавляет его в массив db.blogs, и затем возвращает уникальный ID нового блога.
 
-    async create(blog: BlogInputModel): Promise<BlogBbType> {
+    async create(blog: BlogInputModel) {
         // Убедитесь, что коллекция инициализирована
         if (!blogsCollection) {
             throw new Error("blogsCollection не инициализирована.");
@@ -24,7 +24,9 @@ export const blogsRepository = {
             isMembership: false,
         }
 
-        const res = await blogsCollection.insertOne(newBlog);
+
+        const res = await blogsCollection
+            .insertOne(newBlog);
         return newBlog
     },
 
