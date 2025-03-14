@@ -18,10 +18,10 @@ describe('/blogs', () => {
         await runDb(uri)
     });
 
-    afterAll(async () => {
-        await disconnectDb();
-        await mongoServer.stop(); // Останавливаем сервер
-    });
+    // afterAll(async () => {
+    //     await disconnectDb();
+    //     await mongoServer.stop(); // Останавливаем сервер
+    // });
 
     beforeEach(async () => {
         await clearDb();
