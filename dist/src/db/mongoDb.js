@@ -28,23 +28,6 @@ function runDb(url) {
             const db = client.db("blogs-platform");
             exports.blogsCollection = db.collection('blogs-collection');
             exports.postsCollection = db.collection('posts-collection');
-            // Пример создания документа (блога)
-            const newBlog = {
-                id: new Date().toISOString() + Math.random(),
-                name: 'n11111',
-                description: 'd11111',
-                websiteUrl: 'http://example111111.com',
-                createdAt: new Date().toISOString(),
-                isMembership: false,
-            };
-            const result = yield exports.blogsCollection.insertOne(newBlog); // Добавляем документ в коллекцию
-            // Проверка результата вставки
-            if (result.insertedId) {
-                console.log(`Документ создан с _id: ${result.insertedId}`);
-            }
-            else {
-                console.log("Документ не был добавлен.");
-            }
             // **Добавляем код для вывода существующих баз данных и коллекций**
             const databasesList = yield client.db().admin().listDatabases();
             console.log("Доступные базы данных:");
