@@ -1,7 +1,7 @@
 
 import {BlogInputModel} from "../src/input-output-type/blog_type";
 import {SETTINGS} from "../src/setting";
-import {HTTP_STATUSES} from "../src/db/db";
+import {HTTP_STATUSES, setDB} from "../src/db/db";
 import {codedAuth, createString, dataset1} from "./helpers/dataset";
 import {req} from "./helpers/test-helpers";
 import {MongoMemoryServer} from "mongodb-memory-server";
@@ -25,6 +25,7 @@ describe('/blogs', () => {
 
     beforeEach(async () => {
         await clearDb();
+        //await setDB();
         // Заполняем коллекцию начальными данными
         await blogsCollection.insertMany(dataset1.blogs);
     });

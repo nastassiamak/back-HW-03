@@ -12,11 +12,7 @@ Object.defineProperty(exports, "__esModule", { value: true });
 exports.testingRouter = void 0;
 const express_1 = require("express");
 const db_1 = require("../../db/db");
-const mongoDb_1 = require("../../db/mongoDb");
 exports.testingRouter = (0, express_1.Router)();
 exports.testingRouter.delete('/all-data', (req, res) => __awaiter(void 0, void 0, void 0, function* () {
-    console.log("Запрос поступил на /all-data");
-    yield (0, mongoDb_1.clearDb)();
-    console.log("База данных очищена");
     res.status(db_1.HTTP_STATUSES.NO_CONTENT_204).json({});
 }));
