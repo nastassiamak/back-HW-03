@@ -35,7 +35,7 @@ describe('/blogs', () => {
             name: 'n1',
             description: 'd1',
             websiteUrl: 'http://some.com',
-            createdAt: new Date().toISOString(),
+            createdAt: "2023-01-01T00:00:00Z",
             isMembership: true,
 
         }
@@ -89,7 +89,7 @@ describe('/blogs', () => {
             name: createString(16),
             description: createString(501),
             websiteUrl: createString(101),
-            createdAt: new Date().toISOString(),
+            createdAt: "2023-01-01T00:00:00Z",
             isMembership: false,
         }
 
