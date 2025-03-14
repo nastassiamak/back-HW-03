@@ -35,8 +35,8 @@ describe('/blogs', () => {
             name: 'n1',
             description: 'd1',
             websiteUrl: 'http://some.com',
-            createdAt: "2023-01-01T00:00:00Z",
-            isMembership: true,
+            createdAt: new Date().toISOString(),
+            isMembership: false,
 
         }
 
@@ -65,10 +65,12 @@ describe('/blogs', () => {
 
     it('shouldn\'t create 401', async () => {
         await blogsCollection.deleteMany({}); // Очищаем коллекцию перед каждым тестом
-        const newBlog: BlogInputModel = {
+        const newBlog = {
             name: 'n1',
             description: 'd1',
             websiteUrl: 'http://some.com',
+            createdAt: new Date().toISOString(),
+            isMembership: false,
         }
 
         const res = await req
@@ -89,8 +91,8 @@ describe('/blogs', () => {
             name: createString(16),
             description: createString(501),
             websiteUrl: createString(101),
-            createdAt: "2023-01-01T00:00:00Z",
-            isMembership: false,
+            createdAt: createString(10),
+            isMembership: createString(77),
         }
 
         const res = await req
@@ -101,10 +103,13 @@ describe('/blogs', () => {
 
         console.log(res.body)
 
-        expect(res.body.errorsMessages.length).toEqual(3)
+        expect(res.body.errorsMessages.length).toEqual(5)
         expect(res.body.errorsMessages[0].field).toEqual('name')
         expect(res.body.errorsMessages[1].field).toEqual('description')
         expect(res.body.errorsMessages[2].field).toEqual('websiteUrl')
+        expect(res.body.errorsMessages[3].field).toEqual('createdAt')
+        expect(res.body.errorsMessages[4].field).toEqual('isMembership')
+
 
 
         //проверка что в базе данных нет блогов
@@ -226,6 +231,8 @@ describe('/blogs', () => {
             expect(updatedBlog.name).toEqual(blog.name);
             expect(updatedBlog.description).toEqual(blog.description);
             expect(updatedBlog.websiteUrl).toEqual(blog.websiteUrl);
+            expect(updatedBlog.isMembership).toEqual(blog.isMembership);
+            expect(updatedBlog.createdAt).toEqual(blog.createdAt);
         }
     })
 
@@ -250,10 +257,12 @@ describe('/blogs', () => {
 
     it('shouldn\'t update2', async () => {
         //setDB(dataset1
-        const blog: BlogInputModel = {
+        const blog = {
             name: createString(16),
             description: createString(501),
             websiteUrl: createString(101),
+            createdAt: new Date().toISOString(),
+            isMembership: true,
         }
 
         const res = await req
@@ -272,10 +281,12 @@ describe('/blogs', () => {
 
     it('shouldn\'t update 401', async () => {
       // setDB(dataset1)
-        const blog: BlogInputModel = {
+        const blog = {
             name: createString(16),
             description: createString(501),
             websiteUrl: createString(101),
+            createdAt: new Date().toISOString(),
+            isMembership: true,
         }
 
         const res = await req
