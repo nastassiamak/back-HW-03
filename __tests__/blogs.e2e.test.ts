@@ -26,7 +26,7 @@ describe('/blogs', () => {
 
     beforeEach(async () => {
         await clearDb();
-        //await setDB();
+        await setDB();
         // Заполняем коллекцию начальными данными
         await blogsCollection.insertMany(dataset1.blogs);
     });
@@ -63,7 +63,7 @@ describe('/blogs', () => {
     });
 
     it('shouldn\'t create 401', async () => {
-        await blogsCollection.deleteMany({}); // Очищаем коллекцию перед каждым тестом
+        //await blogsCollection.deleteMany({}); // Очищаем коллекцию перед каждым тестом
         const newBlog: BlogInputModel = {
             name: 'n1',
             description: 'd1',
@@ -84,7 +84,7 @@ describe('/blogs', () => {
     })
 
     it('shouldn\'t create', async () => {
-        await blogsCollection.deleteMany({}); // Очищаем коллекцию перед каждым тестом
+        //await blogsCollection.deleteMany({}); // Очищаем коллекцию перед каждым тестом
         const newBlog: BlogInputModel = {
             name: createString(16),
             description: createString(501),
@@ -115,7 +115,7 @@ describe('/blogs', () => {
     })
 
     it('should get empty array', async () => {
-        await blogsCollection.deleteMany({});
+        //await blogsCollection.deleteMany({});
 
         const res = await req
             .get(SETTINGS.PATH.BLOGS)
@@ -176,7 +176,7 @@ describe('/blogs', () => {
     })
 
     it('shouldn\'t del', async () => {
-        await blogsCollection.deleteMany({});
+        //await blogsCollection.deleteMany({});
 
         const res = await req
             .delete(SETTINGS.PATH.BLOGS + '/1')
@@ -187,7 +187,7 @@ describe('/blogs', () => {
     })
 
     it('shouldn\'t del 401', async () => {
-        await blogsCollection.deleteMany({});
+       // await blogsCollection.deleteMany({});
 
         const res = await req
             .delete(SETTINGS.PATH.BLOGS + '/1')

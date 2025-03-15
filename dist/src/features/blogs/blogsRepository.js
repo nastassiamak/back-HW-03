@@ -28,7 +28,8 @@ exports.blogsRepository = {
                 createdAt: new Date().toISOString(),
                 isMembership: false,
             };
-            const res = yield mongoDb_1.blogsCollection.insertOne(newBlog);
+            const res = yield mongoDb_1.blogsCollection
+                .insertOne(newBlog);
             return newBlog;
         });
     },
