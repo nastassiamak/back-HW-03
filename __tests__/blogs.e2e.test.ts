@@ -16,7 +16,14 @@ describe('/blogs', () => {
     beforeAll(async () => {
         mongoServer = await MongoMemoryServer.create();
         const uri = mongoServer.getUri();
-        await runDb(uri)
+
+            try {
+                await runDb(uri); // Попытка запустить БД
+                console.log("База данных успешно запущена");
+            } catch (error) {
+                console.error("Ошибка при запуске БД:", error);
+            }
+
     });
 
     // afterAll(async () => {
@@ -24,12 +31,12 @@ describe('/blogs', () => {
     //     await mongoServer.stop(); // Останавливаем сервер
     // });
 
-    beforeEach(async () => {
-        await clearDb();
-        await setDB();
-        // Заполняем коллекцию начальными данными
-        await blogsCollection.insertMany(dataset1.blogs);
-    });
+    // beforeEach(async () => {
+    //     await clearDb();
+    //     await setDB();
+    //     // Заполняем коллекцию начальными данными
+    //     await blogsCollection.insertMany(dataset1.blogs);
+    // });
 
     it('should create', async () => {
 
@@ -63,7 +70,7 @@ describe('/blogs', () => {
     });
 
     it('shouldn\'t create 401', async () => {
-        //await blogsCollection.deleteMany({}); // Очищаем коллекцию перед каждым тестом
+        await blogsCollection.deleteMany({}); // Очищаем коллекцию перед каждым тестом
         const newBlog: BlogInputModel = {
             name: 'n1',
             description: 'd1',
@@ -84,7 +91,7 @@ describe('/blogs', () => {
     })
 
     it('shouldn\'t create', async () => {
-        //await blogsCollection.deleteMany({}); // Очищаем коллекцию перед каждым тестом
+        await blogsCollection.deleteMany({}); // Очищаем коллекцию перед каждым тестом
         const newBlog: BlogInputModel = {
             name: createString(16),
             description: createString(501),
@@ -115,7 +122,7 @@ describe('/blogs', () => {
     })
 
     it('should get empty array', async () => {
-        //await blogsCollection.deleteMany({});
+        await blogsCollection.deleteMany({});
 
         const res = await req
             .get(SETTINGS.PATH.BLOGS)
@@ -127,7 +134,7 @@ describe('/blogs', () => {
     })
 
     it('should get not empty array', async () => {
-       //setDB(dataset1) // заполнение базы данных начальными данными если нужно
+        await blogsCollection.insertMany(dataset1.blogs);
 
         const res = await req
             .get(SETTINGS.PATH.BLOGS)
@@ -141,7 +148,7 @@ describe('/blogs', () => {
     })
 
     it('shouldn\'t find', async () => {
-        //setDB(dataset1)
+        //await blogsCollection.insertMany(dataset1.blogs);
 
         const res = await req
             .get(SETTINGS.PATH.BLOGS + '/1')
@@ -151,7 +158,7 @@ describe('/blogs', () => {
     })
 
     it('should find', async () => {
-       //setDB(dataset1)
+        //await blogsCollection.insertMany(dataset1.blogs);
 
         const res = await req
             .get(SETTINGS.PATH.BLOGS + '/' + dataset1.blogs[0].id)
@@ -163,7 +170,7 @@ describe('/blogs', () => {
     })
 
     it('should del', async () => {
-       // setDB(dataset1)
+        //await blogsCollection.insertMany(dataset1.blogs);
 
         const res = await req
             .delete(SETTINGS.PATH.BLOGS + '/' + dataset1.blogs[0].id)
@@ -176,7 +183,7 @@ describe('/blogs', () => {
     })
 
     it('shouldn\'t del', async () => {
-        //await blogsCollection.deleteMany({});
+        await blogsCollection.deleteMany({});
 
         const res = await req
             .delete(SETTINGS.PATH.BLOGS + '/1')
@@ -187,7 +194,7 @@ describe('/blogs', () => {
     })
 
     it('shouldn\'t del 401', async () => {
-       // await blogsCollection.deleteMany({});
+       await blogsCollection.deleteMany({});
 
         const res = await req
             .delete(SETTINGS.PATH.BLOGS + '/1')
@@ -202,7 +209,8 @@ describe('/blogs', () => {
     })
 
     it('should update', async () => {
-       // setDB(dataset1)
+        await blogsCollection.insertMany(dataset1.blogs);
+
         const blog = {
             name: 'n2',
             description: 'd2',
@@ -233,7 +241,8 @@ describe('/blogs', () => {
     })
 
     it('shouldn\'t update 404', async () => {
-      //setDB()
+        await blogsCollection.deleteMany({});
+
         const blog = {
             name: 'n1',
             description: 'd1',
@@ -252,7 +261,8 @@ describe('/blogs', () => {
     })
 
     it('shouldn\'t update2', async () => {
-        //setDB(dataset1
+        await blogsCollection.insertMany(dataset1.blogs);
+
         const blog = {
             name: createString(16),
             description: createString(501),
@@ -276,7 +286,8 @@ describe('/blogs', () => {
     })
 
     it('shouldn\'t update 401', async () => {
-      // setDB(dataset1)
+        //await blogsCollection.insertMany(dataset1.blogs);
+
         const blog = {
             name: createString(16),
             description: createString(501),
