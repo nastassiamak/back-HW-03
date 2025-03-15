@@ -1,6 +1,7 @@
 import {Collection, MongoClient} from 'mongodb';
 import {BlogBbType} from "./blog-db-type";
 import {PostDBType} from "./post-db-type";
+import {SETTINGS} from "../setting";
 
 let client: MongoClient;
 export let blogsCollection: Collection<BlogBbType>;
@@ -19,27 +20,27 @@ export async function runDb(url: string): Promise<boolean> {
         await client.connect();
         const db = client.db("blogs-platform")
 
-        blogsCollection = db.collection<BlogBbType>('blogs-collection');
-        postsCollection = db.collection<PostDBType>('posts-collection');
-
-        // **Добавляем код для вывода существующих баз данных и коллекций**
-        const databasesList = await client.db().admin().listDatabases();
-        console.log("Доступные базы данных:");
-        databasesList.databases.forEach(db => console.log(` - ${db.name}`));
-
-        const collections = await db.listCollections().toArray();
-        console.log("Существующие коллекции в базе данных:", collections);
-
-
-        // Проверка, что коллеция действительно создана
-        const blogs = await blogsCollection.find().toArray();
-        console.log("Блоги в коллекции:", blogs); // Здесь должен быть ваш блог
-
-        if (blogs.length === 0) {
-            console.log("Коллекция пуста или не была создана.");
-        } else {
-            console.log("Документы в коллекции успешно загружены.");
-        }
+        blogsCollection = db.collection<BlogBbType>(SETTINGS.PATH.BLOGS);
+        postsCollection = db.collection<PostDBType>(SETTINGS.PATH.POSTS);
+        //
+        // // **Добавляем код для вывода существующих баз данных и коллекций**
+        // const databasesList = await client.db().admin().listDatabases();
+        // console.log("Доступные базы данных:");
+        // databasesList.databases.forEach(db => console.log(` - ${db.name}`));
+        //
+        // const collections = await db.listCollections().toArray();
+        // console.log("Существующие коллекции в базе данных:", collections);
+        //
+        //
+        // // Проверка, что коллеция действительно создана
+        // const blogs = await blogsCollection.find().toArray();
+        // console.log("Блоги в коллекции:", blogs); // Здесь должен быть ваш блог
+        //
+        // if (blogs.length === 0) {
+        //     console.log("Коллекция пуста или не была создана.");
+        // } else {
+        //     console.log("Документы в коллекции успешно загружены.");
+        // }
 
         await db.command({ping: 1})
         console.log("Database Connected")
