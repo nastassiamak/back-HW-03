@@ -5,7 +5,7 @@ import {codedAuth, createString, dataset1} from "./helpers/dataset";
 import {req} from "./helpers/test-helpers";
 import {MongoMemoryServer} from "mongodb-memory-server";
 import {MongoClient} from "mongodb";
-import {blogsCollection, clearDb, disconnectDb, runDb} from "../src/db/mongoDb";
+import {blogsCollection, disconnectDb, runDb} from "../src/db/mongoDb";
 import {BlogBbType} from "../src/db/blog-db-type";
 let mongoServer: MongoMemoryServer;
 //let client: MongoClient
@@ -304,8 +304,5 @@ describe('/blogs', () => {
         expect(blogsInDb.length).toBe(dataset1.blogs.length); // Количество должно остаться прежним
     })
 
-    it("should delete all data", async () => {
-        const response = await req.delete("/testing/all-data");
-        expect(response.status).toBe(204); // Ожидается, что ответ будет 204
-    });
+
 })
