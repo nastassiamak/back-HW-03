@@ -14,16 +14,15 @@ const db_1 = require("../../../db/db");
 const blogsRepository_1 = require("../blogsRepository");
 const createBlogController = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     const newBlogId = yield blogsRepository_1.blogsRepository.create(req.body);
-    const newBlog = yield blogsRepository_1.blogsRepository.findAndMap(newBlogId.id);
-    if (!newBlog) {
+    if (!newBlogId) {
         res
             .status(db_1.HTTP_STATUSES.BAD_REQUEST_400);
     }
     else {
+        const newBlog = yield blogsRepository_1.blogsRepository.findAndMap(newBlogId.id);
         res
             .status(db_1.HTTP_STATUSES.CREATED_201)
             .json(newBlog);
     }
-    console.log(newBlog);
 });
 exports.createBlogController = createBlogController;

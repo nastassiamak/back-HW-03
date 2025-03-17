@@ -12,8 +12,6 @@ Object.defineProperty(exports, "__esModule", { value: true });
 exports.blogsRepository = void 0;
 const mongoDb_1 = require("../../db/mongoDb");
 exports.blogsRepository = {
-    //Этот метод создает новый блог. Он принимает объект BlogInputModel, создает новый объект BlogDbType,
-    //добавляет его в массив db.blogs, и затем возвращает уникальный ID нового блога.
     create(blog) {
         return __awaiter(this, void 0, void 0, function* () {
             // Убедитесь, что коллекция инициализирована
@@ -21,15 +19,14 @@ exports.blogsRepository = {
                 throw new Error("blogsCollection не инициализирована.");
             }
             const newBlog = {
-                id: new Date().toISOString() + Math.random(),
+                id: new Date().toISOString() + Math.random().toString(),
                 name: blog.name,
                 description: blog.description,
                 websiteUrl: blog.websiteUrl,
                 createdAt: new Date().toISOString(),
-                isMembership: false,
+                isMembership: true,
             };
-            const res = yield mongoDb_1.blogsCollection
-                .insertOne(newBlog);
+            yield mongoDb_1.blogsCollection.insertOne(newBlog);
             return newBlog;
         });
     },
@@ -55,7 +52,7 @@ exports.blogsRepository = {
     //Метод для удаления блога по ID.
     del(id) {
         return __awaiter(this, void 0, void 0, function* () {
-            const result = yield mongoDb_1.blogsCollection.deleteOne({ id });
+            const result = yield mongoDb_1.blogsCollection.deleteOne({ id: id });
             return result.deletedCount ? { id } : null;
         });
     },

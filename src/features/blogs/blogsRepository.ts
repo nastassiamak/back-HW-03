@@ -19,7 +19,7 @@ export const blogsRepository = {
             description: blog.description,
             websiteUrl: blog.websiteUrl,
             createdAt: new Date().toISOString(),
-            isMembership: false,
+            isMembership: true,
         }
 
         await blogsCollection.insertOne(newBlog);
