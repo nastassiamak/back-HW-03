@@ -1,12 +1,10 @@
 import {BlogInputModel, BlogViewModel} from "../../input-output-type/blog_type";
 import {BlogBbType} from "../../db/blog-db-type";
 import {blogsCollection} from "../../db/mongoDb";
-import {ObjectId} from "mongodb";
+
 
 
 export const blogsRepository = {
-    //Этот метод создает новый блог. Он принимает объект BlogInputModel, создает новый объект BlogDbType,
-    //добавляет его в массив db.blogs, и затем возвращает уникальный ID нового блога.
 
     async create(blog: BlogInputModel) {
         // Убедитесь, что коллекция инициализирована
@@ -16,7 +14,7 @@ export const blogsRepository = {
 
         const newBlog: BlogBbType = {
 
-            id: new Date().toISOString() + Math.random(),
+            id: new Date().toISOString()+Math.random().toString(),
             name: blog.name,
             description: blog.description,
             websiteUrl: blog.websiteUrl,
@@ -24,9 +22,7 @@ export const blogsRepository = {
             isMembership: false,
         }
 
-
-        const res = await blogsCollection
-            .insertOne(newBlog);
+        await blogsCollection.insertOne(newBlog);
         return newBlog
     },
 
@@ -49,7 +45,7 @@ export const blogsRepository = {
 
     //Метод для удаления блога по ID.
     async del(id: string) {
-        const result = await blogsCollection.deleteOne({id})
+        const result = await blogsCollection.deleteOne({id: id});
         return result.deletedCount ? {id}: null
     },
 

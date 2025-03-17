@@ -6,6 +6,7 @@ import {blogsRepository} from "../blogsRepository";
 import {PostInputModel} from "../../../input-output-type/post_type";
 import {postsRepository} from "../../posts/postsRepository";
 import {blogsCollection} from "../../../db/mongoDb";
+import {ObjectId} from "mongodb";
 
 
 

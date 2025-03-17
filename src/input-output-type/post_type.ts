@@ -1,5 +1,7 @@
+import {ObjectId} from "mongodb";
+
 export type PostViewModel = {
-    //_id?: ObjectId;
+
     id: string;
     title: string;
     shortDescription: string;

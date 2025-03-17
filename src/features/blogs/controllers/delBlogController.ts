@@ -3,6 +3,7 @@ import {Request, Response} from "express";
 import {db, HTTP_STATUSES} from "../../../db/db";
 import {blogsRepository} from "../blogsRepository";
 import {postsRepository} from "../../posts/postsRepository";
+import {ObjectId} from "mongodb";
 
 export const delBlogController = async (req: Request<{ id: string }>, res: Response) => {
     const { id } = req.params; // Извлекаем ID блога

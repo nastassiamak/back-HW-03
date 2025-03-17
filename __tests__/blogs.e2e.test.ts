@@ -31,12 +31,11 @@ describe('/blogs', () => {
     //     await mongoServer.stop(); // Останавливаем сервер
     // });
 
-    // beforeEach(async () => {
-    //     await clearDb();
-    //     await setDB();
-    //     // Заполняем коллекцию начальными данными
-    //     await blogsCollection.insertMany(dataset1.blogs);
-    // });
+    beforeEach(async () => {
+        await blogsCollection.drop()
+        // Заполняем коллекцию начальными данными
+        await blogsCollection.insertMany(dataset1.blogs);
+    });
 
     it('should create', async () => {
 
@@ -134,7 +133,7 @@ describe('/blogs', () => {
     })
 
     it('should get not empty array', async () => {
-        await blogsCollection.insertMany(dataset1.blogs);
+        //await blogsCollection.insertMany(dataset1.blogs);
 
         const res = await req
             .get(SETTINGS.PATH.BLOGS)
@@ -209,7 +208,7 @@ describe('/blogs', () => {
     })
 
     it('should update', async () => {
-        await blogsCollection.insertMany(dataset1.blogs);
+       // await blogsCollection.insertMany(dataset1.blogs);
 
         const blog = {
             name: 'n2',
@@ -261,7 +260,7 @@ describe('/blogs', () => {
     })
 
     it('shouldn\'t update2', async () => {
-        await blogsCollection.insertMany(dataset1.blogs);
+       // await blogsCollection.insertMany(dataset1.blogs);
 
         const blog = {
             name: createString(16),
