@@ -1,4 +1,3 @@
-
 import {BlogInputModel} from "../src/input-output-type/blog_type";
 import {SETTINGS} from "../src/setting";
 import {HTTP_STATUSES, setDB} from "../src/db/db";
@@ -8,28 +7,25 @@ import {MongoMemoryServer} from "mongodb-memory-server";
 import {MongoClient} from "mongodb";
 import {blogsCollection, clearDb, disconnectDb, runDb} from "../src/db/mongoDb";
 import {BlogBbType} from "../src/db/blog-db-type";
-
 let mongoServer: MongoMemoryServer;
 //let client: MongoClient
-
 describe('/blogs', () => {
     beforeAll(async () => {
         mongoServer = await MongoMemoryServer.create();
         const uri = mongoServer.getUri();
-
-            try {
-                await runDb(uri); // Попытка запустить БД
-                console.log("База данных успешно запущена");
-            } catch (error) {
-                console.error("Ошибка при запуске БД:", error);
-            }
+        try {
+            await runDb(uri); // Попытка запустить БД
+            console.log("База данных успешно запущена");
+        } catch (error) {
+            console.error("Ошибка при запуске БД:", error);
+        }
 
     });
 
-    // afterAll(async () => {
-    //     await disconnectDb();
-    //     await mongoServer.stop(); // Останавливаем сервер
-    // });
+    afterAll(async () => {
+        await disconnectDb();
+        await mongoServer.stop(); // Останавливаем сервер
+    });
 
     beforeEach(async () => {
         await blogsCollection.drop()
@@ -153,7 +149,7 @@ describe('/blogs', () => {
             .get(SETTINGS.PATH.BLOGS + '/1')
             .expect(HTTP_STATUSES.NOT_FOUND_404) // проверка на ошибку
 
-         console.log(res.body)
+        console.log(res.body)
     })
 
     it('should find', async () => {
@@ -193,14 +189,14 @@ describe('/blogs', () => {
     })
 
     it('shouldn\'t del 401', async () => {
-       await blogsCollection.deleteMany({});
+        await blogsCollection.deleteMany({});
 
         const res = await req
             .delete(SETTINGS.PATH.BLOGS + '/1')
             .set({'Authorization': 'Basic' + codedAuth}) // no ' '
             .expect(HTTP_STATUSES.UNAUTHORIZED_401) // проверка на ошибку
 
-         console.log(res.body)
+        console.log(res.body)
         // // Проверяем состояние базы данных
         const blogsInDb = await blogsCollection.find({}).toArray();
         console.log('Blogs in DB:', blogsInDb); // Логируем состояние базы данных
@@ -208,7 +204,7 @@ describe('/blogs', () => {
     })
 
     it('should update', async () => {
-       // await blogsCollection.insertMany(dataset1.blogs);
+        // await blogsCollection.insertMany(dataset1.blogs);
 
         const blog = {
             name: 'n2',
@@ -225,7 +221,7 @@ describe('/blogs', () => {
             .send(blog)
             .expect(HTTP_STATUSES.NO_CONTENT_204) // проверка на ошибку
 
-         console.log(res.body)
+        console.log(res.body)
         // Убедитесь, что обновленный объект соответствует изменениям в базе данных
         const updatedBlog = await blogsCollection.findOne({ id: dataset1.blogs[0].id }); // Получаем обновленный блог из БД
         expect(updatedBlog).not.toBeNull(); // Проверяем, что блог существует
@@ -260,7 +256,7 @@ describe('/blogs', () => {
     })
 
     it('shouldn\'t update2', async () => {
-       // await blogsCollection.insertMany(dataset1.blogs);
+        // await blogsCollection.insertMany(dataset1.blogs);
 
         const blog = {
             name: createString(16),

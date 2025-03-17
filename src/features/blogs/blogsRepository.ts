@@ -51,7 +51,8 @@ export const blogsRepository = {
 
     //Метод для обновления существующего блога по ID.
     async put(blog: BlogInputModel, id: string) {
-        const result = await blogsCollection.updateOne({id}, {$set: blog });
+        const result = await blogsCollection
+            .updateOne({id}, {$set: blog });
         return result.modifiedCount ? {id}: null
     },
 
