@@ -4,33 +4,31 @@ import {HTTP_STATUSES, setDB} from "../src/db/db";
 import {codedAuth, createString, dataset1} from "./helpers/dataset";
 import {req} from "./helpers/test-helpers";
 import {MongoMemoryServer} from "mongodb-memory-server";
-import {MongoClient} from "mongodb";
 import {blogsCollection, disconnectDb, runDb} from "../src/db/mongoDb";
-import {BlogBbType} from "../src/db/blog-db-type";
-let mongoServer: MongoMemoryServer;
-//let client: MongoClient
-describe('blogs-collection', () => {
+import {MongoClient} from "mongodb";
+
+describe('/blogs', () => {
+    let mongoServer: MongoMemoryServer;
+    let client: MongoClient;
+
     beforeAll(async () => {
+        // Создаем экземпляр MongoMemoryServer
         mongoServer = await MongoMemoryServer.create();
         const uri = mongoServer.getUri();
-        try {
-            await runDb(uri); // Попытка запустить БД
-            console.log("База данных успешно запущена");
-        } catch (error) {
-            console.error("Ошибка при запуске БД:", error);
-        }
+        client = new MongoClient(uri);
 
+        // Подключаемся к временной базе данных
+        await client.connect();
+        await runDb(uri); // Инициализация базы данных
     });
 
     afterAll(async () => {
-        await disconnectDb();
+        await disconnectDb(); // Отключаемся от базы данных
         await mongoServer.stop(); // Останавливаем сервер
     });
 
     beforeEach(async () => {
-        await blogsCollection.drop()
-        // Заполняем коллекцию начальными данными
-        await blogsCollection.insertMany(dataset1.blogs);
+        await blogsCollection.deleteMany({}); // Очищаем коллекцию перед каждым тестом
     });
 
     it('should create', async () => {
@@ -137,9 +135,9 @@ describe('blogs-collection', () => {
 
         console.log(res.body)
 
-        const blogsInDb = await blogsCollection.find({}).toArray();
-        expect(blogsInDb.length).toEqual(1)
-        expect(blogsInDb[0]).toEqual(dataset1.blogs[0])
+        const blogsInDb = await blogsCollection.find().toArray();
+        expect(blogsInDb.length).toEqual(0)
+       // expect(blogsInDb[0]).toEqual(dataset1.blogs[0])
     })
 
     it('shouldn\'t find', async () => {
@@ -153,7 +151,7 @@ describe('blogs-collection', () => {
     })
 
     it('should find', async () => {
-        //await blogsCollection.insertMany(dataset1.blogs);
+        await blogsCollection.insertMany(dataset1.blogs);
 
         const res = await req
             .get(SETTINGS.PATH.BLOGS + '/' + dataset1.blogs[0].id)
@@ -161,11 +159,11 @@ describe('blogs-collection', () => {
 
         console.log(res.body)
         const blogsInDb = await blogsCollection.findOne({id: res.body.id});
-        expect(blogsInDb).toEqual(dataset1.blogs[0])
+       expect(blogsInDb).toEqual(dataset1.blogs[0])
     })
 
     it('should del', async () => {
-        //await blogsCollection.insertMany(dataset1.blogs);
+        await blogsCollection.insertMany(dataset1.blogs);
 
         const res = await req
             .delete(SETTINGS.PATH.BLOGS + '/' + dataset1.blogs[0].id)
@@ -204,7 +202,7 @@ describe('blogs-collection', () => {
     })
 
     it('should update', async () => {
-        // await blogsCollection.insertMany(dataset1.blogs);
+        await blogsCollection.insertMany(dataset1.blogs);
 
         const blog = {
             name: 'n2',
@@ -256,7 +254,7 @@ describe('blogs-collection', () => {
     })
 
     it('shouldn\'t update2', async () => {
-        // await blogsCollection.insertMany(dataset1.blogs);
+        await blogsCollection.insertMany(dataset1.blogs);
 
         const blog = {
             name: createString(16),
@@ -281,7 +279,7 @@ describe('blogs-collection', () => {
     })
 
     it('shouldn\'t update 401', async () => {
-        //await blogsCollection.insertMany(dataset1.blogs);
+        await blogsCollection.insertMany(dataset1.blogs);
 
         const blog = {
             name: createString(16),
