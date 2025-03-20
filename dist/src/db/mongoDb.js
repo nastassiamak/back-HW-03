@@ -13,6 +13,7 @@ exports.postsCollection = exports.blogsCollection = void 0;
 exports.runDb = runDb;
 exports.disconnectDb = disconnectDb;
 const mongodb_1 = require("mongodb");
+const setting_1 = require("../setting");
 let client;
 function runDb(url) {
     return __awaiter(this, void 0, void 0, function* () {
@@ -25,8 +26,8 @@ function runDb(url) {
         try {
             yield client.connect();
             const db = client.db("blogs-platform");
-            exports.blogsCollection = db.collection('blogs-collection');
-            exports.postsCollection = db.collection('post-collection');
+            exports.blogsCollection = db.collection(setting_1.SETTINGS.PATH.BLOGS);
+            exports.postsCollection = db.collection(setting_1.SETTINGS.PATH.POSTS);
             // **Добавляем код для вывода существующих баз данных и коллекций**
             const databasesList = yield client.db().admin().listDatabases();
             console.log("Доступные базы данных:");

@@ -21,8 +21,8 @@ export async function runDb(url: string): Promise<boolean> {
         await client.connect();
         const db = client.db("blogs-platform")
 
-        blogsCollection = db.collection<BlogBbType>('blogs-collection');
-        postsCollection = db.collection<PostDBType>('post-collection');
+        blogsCollection = db.collection<BlogBbType>(SETTINGS.PATH.BLOGS);
+        postsCollection = db.collection<PostDBType>(SETTINGS.PATH.POSTS);
 
 
         // **Добавляем код для вывода существующих баз данных и коллекций**
