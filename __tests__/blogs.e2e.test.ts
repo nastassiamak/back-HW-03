@@ -7,7 +7,7 @@ import {MongoMemoryServer} from "mongodb-memory-server";
 import {blogsCollection, disconnectDb, runDb} from "../src/db/mongoDb";
 import {MongoClient} from "mongodb";
 
-describe('/blogs', () => {
+describe('/blogs-collection', () => {
     let mongoServer: MongoMemoryServer;
     let client: MongoClient;
 
