@@ -11,9 +11,9 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.postsCollection = exports.blogsCollection = void 0;
 exports.runDb = runDb;
-exports.clearDb = clearDb;
 exports.disconnectDb = disconnectDb;
 const mongodb_1 = require("mongodb");
+const setting_1 = require("../setting");
 let client;
 function runDb(url) {
     return __awaiter(this, void 0, void 0, function* () {
@@ -26,27 +26,32 @@ function runDb(url) {
         try {
             yield client.connect();
             const db = client.db("blogs-platform");
-            exports.blogsCollection = db.collection("blogs-collection");
-            exports.postsCollection = db.collection("posts-collection");
-            //
-            // // **Добавляем код для вывода существующих баз данных и коллекций**
-            // const databasesList = await client.db().admin().listDatabases();
-            // console.log("Доступные базы данных:");
-            // databasesList.databases.forEach(db => console.log(` - ${db.name}`));
-            //
-            // const collections = await db.listCollections().toArray();
-            // console.log("Существующие коллекции в базе данных:", collections);
-            //
-            //
-            // // Проверка, что коллеция действительно создана
-            // const blogs = await blogsCollection.find().toArray();
-            // console.log("Блоги в коллекции:", blogs); // Здесь должен быть ваш блог
-            //
-            // if (blogs.length === 0) {
-            //     console.log("Коллекция пуста или не была создана.");
-            // } else {
-            //     console.log("Документы в коллекции успешно загружены.");
-            // }
+            exports.blogsCollection = db.collection(setting_1.SETTINGS.PATH.BLOGS);
+            exports.postsCollection = db.collection(setting_1.SETTINGS.PATH.BLOGS);
+            // **Добавляем код для вывода существующих баз данных и коллекций**
+            const databasesList = yield client.db().admin().listDatabases();
+            console.log("Доступные базы данных:");
+            databasesList.databases.forEach(db => console.log(` - ${db.name}`));
+            const collections = yield db.listCollections().toArray();
+            console.log("Существующие коллекции в базе данных:", collections);
+            // Проверка, что коллеция действительно создана
+            const blogs = yield exports.blogsCollection.find().toArray();
+            console.log("Блоги в коллекции:", blogs); // Здесь должен быть ваш блог
+            if (blogs.length === 0) {
+                console.log("Коллекция пуста или не была создана.");
+            }
+            else {
+                console.log("Документы в коллекции успешно загружены.");
+            }
+            // Проверка, что коллеция действительно создана
+            const posts = yield exports.postsCollection.find().toArray();
+            console.log("Блоги в коллекции:", posts); // Здесь должен быть ваш блог
+            if (posts.length === 0) {
+                console.log("Коллекция пуста или не была создана.");
+            }
+            else {
+                console.log("Документы в коллекции успешно загружены.");
+            }
             yield db.command({ ping: 1 });
             console.log("Database Connected");
             return true;
@@ -55,23 +60,6 @@ function runDb(url) {
             console.error("Database connection error:", err);
             yield client.close();
             return false;
-        }
-    });
-}
-function clearDb() {
-    return __awaiter(this, void 0, void 0, function* () {
-        try {
-            if (exports.blogsCollection) {
-                yield exports.blogsCollection.deleteMany({}); // Удаляем все документы из коллекции блогов
-                console.log("Все блоги были удалены из коллекции.");
-            }
-            if (exports.postsCollection) {
-                yield exports.postsCollection.deleteMany({}); // Удаляем все документы из коллекции постов
-                console.log("Все посты были удалены из коллекции.");
-            }
-        }
-        catch (err) {
-            console.error("Ошибка при очистке базы данных:", err);
         }
     });
 }

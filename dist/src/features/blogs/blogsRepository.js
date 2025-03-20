@@ -59,7 +59,8 @@ exports.blogsRepository = {
     //Метод для обновления существующего блога по ID.
     put(blog, id) {
         return __awaiter(this, void 0, void 0, function* () {
-            const result = yield mongoDb_1.blogsCollection.updateOne({ id }, { $set: blog });
+            const result = yield mongoDb_1.blogsCollection
+                .updateOne({ id }, { $set: blog });
             return result.modifiedCount ? { id } : null;
         });
     },

@@ -10,7 +10,7 @@ import {MongoMemoryServer} from "mongodb-memory-server";
 let mongoServer: MongoMemoryServer;
 let client: MongoClient
 
-describe('/posts', () => {
+describe('/blogs-platform/posts', () => {
     beforeAll(async () => {
         mongoServer = await MongoMemoryServer.create();
         const uri = mongoServer.getUri();

@@ -11,9 +11,20 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.testingRouter = void 0;
 const express_1 = require("express");
-const db_1 = require("../../db/db");
+const mongoDb_1 = require("../../db/mongoDb");
 exports.testingRouter = (0, express_1.Router)();
 exports.testingRouter.delete('/all-data', (req, res) => __awaiter(void 0, void 0, void 0, function* () {
-    (0, db_1.setDB)();
-    res.status(db_1.HTTP_STATUSES.NO_CONTENT_204).json({});
+    try {
+        if (mongoDb_1.blogsCollection) {
+            yield mongoDb_1.blogsCollection.deleteMany({}); // Удаляем все документы из коллекции блогов
+            console.log("Все блоги были удалены из коллекции.");
+        }
+        if (mongoDb_1.postsCollection) {
+            yield mongoDb_1.postsCollection.deleteMany({}); // Удаляем все документы из коллекции постов
+            console.log("Все посты были удалены из коллекции.");
+        }
+    }
+    catch (err) {
+        console.error("Ошибка при очистке базы данных:", err);
+    }
 }));
