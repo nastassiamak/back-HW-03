@@ -7,6 +7,7 @@ let client: MongoClient;
 export let blogsCollection: Collection<BlogBbType>;
 export let postsCollection: Collection<PostDBType>;
 
+
 export async function runDb(url: string): Promise<boolean> {
     console.log("Запуск функции runDb");
     // Проверка на undefined
@@ -20,8 +21,9 @@ export async function runDb(url: string): Promise<boolean> {
         await client.connect();
         const db = client.db("blogs-platform")
 
-        blogsCollection = db.collection<BlogBbType>(SETTINGS.PATH.BLOGS);
-        postsCollection = db.collection<PostDBType>(SETTINGS.PATH.BLOGS);
+        blogsCollection = db.collection<BlogBbType>('blogs-collection');
+        postsCollection = db.collection<PostDBType>('post-collection');
+
 
         // **Добавляем код для вывода существующих баз данных и коллекций**
         const databasesList = await client.db().admin().listDatabases();

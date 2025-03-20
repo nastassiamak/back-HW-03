@@ -9,7 +9,7 @@ import {blogsCollection, disconnectDb, runDb} from "../src/db/mongoDb";
 import {BlogBbType} from "../src/db/blog-db-type";
 let mongoServer: MongoMemoryServer;
 //let client: MongoClient
-describe('/blogs-platform/blogs', () => {
+describe('blogs-collection', () => {
     beforeAll(async () => {
         mongoServer = await MongoMemoryServer.create();
         const uri = mongoServer.getUri();
