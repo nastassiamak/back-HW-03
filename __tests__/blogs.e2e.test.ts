@@ -7,7 +7,7 @@ import {MongoMemoryServer} from "mongodb-memory-server";
 import {blogsCollection, disconnectDb, runDb} from "../src/db/mongoDb";
 import {MongoClient} from "mongodb";
 
-describe('/blogs-collection', () => {
+describe('/blogs', () => {
     let mongoServer: MongoMemoryServer;
     let client: MongoClient;
 
@@ -17,9 +17,11 @@ describe('/blogs-collection', () => {
         const uri = mongoServer.getUri();
         client = new MongoClient(uri);
 
+
         // Подключаемся к временной базе данных
         await client.connect();
         await runDb(uri); // Инициализация базы данных
+
     });
 
     afterAll(async () => {
@@ -28,8 +30,10 @@ describe('/blogs-collection', () => {
     });
 
     beforeEach(async () => {
+
         await blogsCollection.deleteMany({}); // Очищаем коллекцию перед каждым тестом
     });
+
 
     it('should create', async () => {
 
@@ -301,6 +305,5 @@ describe('/blogs-collection', () => {
         const blogsInDb = await blogsCollection.find({}).toArray();
         expect(blogsInDb.length).toBe(dataset1.blogs.length); // Количество должно остаться прежним
     })
-
 
 })

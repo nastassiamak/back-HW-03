@@ -5,7 +5,6 @@ export const testingRouter = Router();
 
 testingRouter.delete('/all-data', async (req,
                                          res) => {
-
         try {
             if (blogsCollection) {
                 await blogsCollection.deleteMany({}); // Удаляем все документы из коллекции блогов
