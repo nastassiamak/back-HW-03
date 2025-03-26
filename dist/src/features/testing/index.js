@@ -14,17 +14,12 @@ const express_1 = require("express");
 const mongoDb_1 = require("../../db/mongoDb");
 exports.testingRouter = (0, express_1.Router)();
 exports.testingRouter.delete('/all-data', (req, res) => __awaiter(void 0, void 0, void 0, function* () {
-    try {
-        if (mongoDb_1.blogsCollection) {
-            yield mongoDb_1.blogsCollection.deleteMany({}); // Удаляем все документы из коллекции блогов
-            console.log("Все блоги были удалены из коллекции.");
-        }
-        if (mongoDb_1.postsCollection) {
-            yield mongoDb_1.postsCollection.deleteMany({}); // Удаляем все документы из коллекции постов
-            console.log("Все посты были удалены из коллекции.");
-        }
-    }
-    catch (err) {
-        console.error("Ошибка при очистке базы данных:", err);
-    }
+    // Очищаем коллекцию блогов
+    yield mongoDb_1.blogsCollection.deleteMany({});
+    console.log("Все блоги были удалены из коллекции.");
+    // Очищаем коллекцию постов
+    yield mongoDb_1.postsCollection.deleteMany({});
+    console.log("Все посты были удалены из коллекции.");
+    // Возвращаем статус 204 без содержимого
+    res.sendStatus(204);
 }));

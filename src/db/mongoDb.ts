@@ -25,34 +25,6 @@ export async function runDb(url: string): Promise<boolean> {
         postsCollection = db.collection<PostDBType>(SETTINGS.PATH.POSTS);
 
 
-        // **Добавляем код для вывода существующих баз данных и коллекций**
-        const databasesList = await client.db().admin().listDatabases();
-        console.log("Доступные базы данных:");
-        databasesList.databases.forEach(db => console.log(` - ${db.name}`));
-
-        const collections = await db.listCollections().toArray();
-        console.log("Существующие коллекции в базе данных:", collections);
-
-
-        // Проверка, что коллеция действительно создана
-        const blogs = await blogsCollection.find().toArray();
-        console.log("Блоги в коллекции:", blogs); // Здесь должен быть ваш блог
-
-        if (blogs.length === 0) {
-            console.log("Коллекция пуста или не была создана.");
-        } else {
-            console.log("Документы в коллекции успешно загружены.");
-        }
-        // Проверка, что коллеция действительно создана
-        const posts = await postsCollection.find().toArray();
-        console.log("Блоги в коллекции:", posts); // Здесь должен быть ваш блог
-
-        if (posts.length === 0) {
-            console.log("Коллекция пуста или не была создана.");
-        } else {
-            console.log("Документы в коллекции успешно загружены.");
-        }
-
 
         await db.command({ping: 1})
         console.log("Database Connected")

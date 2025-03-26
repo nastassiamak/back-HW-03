@@ -1,14 +1,19 @@
 import {Router} from "express";
-
-import {HTTP_STATUSES} from "../../db/db";
 import {blogsCollection, postsCollection} from "../../db/mongoDb";
 
 export const testingRouter = Router();
 
 testingRouter.delete('/all-data', async (req,
                                          res) => {
+    // Очищаем коллекцию блогов
     await blogsCollection.deleteMany({});
+    console.log("Все блоги были удалены из коллекции.");
+
+    // Очищаем коллекцию постов
     await postsCollection.deleteMany({});
-    res.status(HTTP_STATUSES.NO_CONTENT_204).json({})
+    console.log("Все посты были удалены из коллекции.");
+
+    // Возвращаем статус 204 без содержимого
+    res.sendStatus(204);
 
 })

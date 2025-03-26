@@ -28,30 +28,6 @@ function runDb(url) {
             const db = client.db("blogs-platform");
             exports.blogsCollection = db.collection(setting_1.SETTINGS.PATH.BLOGS);
             exports.postsCollection = db.collection(setting_1.SETTINGS.PATH.POSTS);
-            // **Добавляем код для вывода существующих баз данных и коллекций**
-            const databasesList = yield client.db().admin().listDatabases();
-            console.log("Доступные базы данных:");
-            databasesList.databases.forEach(db => console.log(` - ${db.name}`));
-            const collections = yield db.listCollections().toArray();
-            console.log("Существующие коллекции в базе данных:", collections);
-            // Проверка, что коллеция действительно создана
-            const blogs = yield exports.blogsCollection.find().toArray();
-            console.log("Блоги в коллекции:", blogs); // Здесь должен быть ваш блог
-            if (blogs.length === 0) {
-                console.log("Коллекция пуста или не была создана.");
-            }
-            else {
-                console.log("Документы в коллекции успешно загружены.");
-            }
-            // Проверка, что коллеция действительно создана
-            const posts = yield exports.postsCollection.find().toArray();
-            console.log("Блоги в коллекции:", posts); // Здесь должен быть ваш блог
-            if (posts.length === 0) {
-                console.log("Коллекция пуста или не была создана.");
-            }
-            else {
-                console.log("Документы в коллекции успешно загружены.");
-            }
             yield db.command({ ping: 1 });
             console.log("Database Connected");
             return true;

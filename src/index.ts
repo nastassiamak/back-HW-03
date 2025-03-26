@@ -1,6 +1,8 @@
 import {app} from "./app";
 import {SETTINGS} from "./setting";
 import {runDb} from "./db/mongoDb";
+import dotenv from 'dotenv'
+dotenv.config()
 
 const startApp = async () => {
 

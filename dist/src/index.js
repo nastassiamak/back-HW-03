@@ -8,10 +8,15 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
         step((generator = generator.apply(thisArg, _arguments || [])).next());
     });
 };
+var __importDefault = (this && this.__importDefault) || function (mod) {
+    return (mod && mod.__esModule) ? mod : { "default": mod };
+};
 Object.defineProperty(exports, "__esModule", { value: true });
 const app_1 = require("./app");
 const setting_1 = require("./setting");
 const mongoDb_1 = require("./db/mongoDb");
+const dotenv_1 = __importDefault(require("dotenv"));
+dotenv_1.default.config();
 const startApp = () => __awaiter(void 0, void 0, void 0, function* () {
     const res = yield (0, mongoDb_1.runDb)('mongodb+srv://admin:admin@lesson.cc5eg.mongodb.net/?retryWrites=true&w=majority&appName=lesson');
     //if (!res) process.exit(1);
