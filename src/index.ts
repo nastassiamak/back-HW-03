@@ -28,7 +28,7 @@ const startApp = async () => {
     });
 
     app.listen(SETTINGS.PORT, (err) => {
-        err ? console.log(err) : console.log('...server started in port ' + SETTINGS.PORT)
+        err ?  console.log(err) : console.log('...server started in port ' + SETTINGS.PORT)
     })
 
 }
