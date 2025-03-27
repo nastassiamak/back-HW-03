@@ -13,19 +13,7 @@ const startApp = async () => {
     } else {
         console.log("Не удалось подключиться к базе данных.");
     }
-    app.delete('/testing/all-data', async (req, res) => {
-        try {
-            // Очищаем коллекцию блогов
-            await blogsCollection.deleteMany({});
-            // Очищаем коллекцию постов
-            await postsCollection.deleteMany({});
 
-            res.status(204).send(); // Ответ без содержимого
-        } catch (error) {
-            console.error("Ошибка при очистке данных:", error);
-            res.status(500).send("Ошибка сервера");
-        }
-    });
 
     app.listen(SETTINGS.PORT, (err) => {
         err ?  console.log(err) : console.log('...server started in port ' + SETTINGS.PORT)

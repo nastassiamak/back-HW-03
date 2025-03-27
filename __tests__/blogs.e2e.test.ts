@@ -14,7 +14,7 @@ describe('/blogs', () => {
     beforeAll(async () => {
         // Создаем экземпляр MongoMemoryServer
         mongoServer = await MongoMemoryServer.create();
-        const uri = mongoServer.getUri();
+         const uri = mongoServer.getUri();
         client = new MongoClient(uri);
 
 
@@ -119,7 +119,7 @@ describe('/blogs', () => {
     })
 
     it('should get empty array', async () => {
-        await blogsCollection.deleteMany({});
+       await blogsCollection.deleteMany({});
 
         const res = await req
             .get(SETTINGS.PATH.BLOGS)

@@ -1,19 +1,17 @@
-import {Router} from "express";
-import {blogsCollection, postsCollection} from "../../db/mongoDb";
+import { Router } from "express";
+import { client } from "../../db/mongoDb"; // Импортируем client из mongoDb
+import { clearDatabase } from "../../db/mongoDb"; // Импортируем функцию для очистки базы данных
 
 export const testingRouter = Router();
 
-testingRouter.delete('/all-data', async (req,
-                                         res) => {
-    // Очищаем коллекцию блогов
-    await blogsCollection.deleteMany({});
-    console.log("Все блоги были удалены из коллекции.");
-
-    // Очищаем коллекцию постов
-    await postsCollection.deleteMany({});
-    console.log("Все посты были удалены из коллекции.");
-
-    // Возвращаем статус 204 без содержимого
-    res.sendStatus(204);
-
-})
+testingRouter.delete('/all-data', async (req, res) => {
+    // Эндпоинт для удаления всех данных из базы данных
+    try {
+        const db = client.db("blogs-platform"); // Получаем базу данных
+        await clearDatabase(db); // Вызываем функцию очистки базы данных
+        res.sendStatus(204); // Возвращаем статус 204
+    } catch (err) {
+        console.error("Ошибка при удалении всех данных:", err);
+        res.status(500).send("Ошибка сервера"); // Возвращаем статус 500 в случае ошибки
+    }
+});
