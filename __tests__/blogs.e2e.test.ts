@@ -42,7 +42,7 @@ describe('/blogs', () => {
             description: 'd1',
             websiteUrl: 'http://some.com',
             createdAt: new Date().toISOString(),
-            isMembership: false
+            isMembership: true
         }
 
         const res = await req
