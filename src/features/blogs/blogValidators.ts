@@ -31,9 +31,9 @@ export const createdAtValidator = body('createdAt')
     .matches(/^\d{4}-[01]\d-[0-3]\dT[0-2]\d:[0-5]\d:[0-5]\d(\.\d+)?([+-][0-2]\d:[0-5]\d|Z)$/)
     .withMessage('not valid date format');
 */
-export const isMembershipValidator = body('isMembership')
-    .isBoolean().withMessage('must be a boolean')
-    .toBoolean(); // Опционально, чтобы преобразовать входное значение в булевый тип
+// export const isMembershipValidator = body('isMembership')
+//     .isBoolean().withMessage('must be a boolean')
+//     .toBoolean(); // Опционально, чтобы преобразовать входное значение в булевый тип
 
 export const findBlogValidator = async (req: Request<{id: string}>,
                                   res: Response, next: NextFunction) => {
@@ -51,7 +51,7 @@ export const blogValidators = [
     descriptionValidator,
     websiteUrlValidator,
     //createdAtValidator,
-    isMembershipValidator,
+    //isMembershipValidator,
 
     inputCheckErrorsMiddleware,
 ]
