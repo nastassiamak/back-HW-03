@@ -11,15 +11,21 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.testingRouter = void 0;
 const express_1 = require("express");
-const mongoDb_1 = require("../../db/mongoDb");
+const mongoDb_1 = require("../../db/mongoDb"); // Импортируем client из mongoDb
+const mongoDb_2 = require("../../db/mongoDb");
+const admin_middleware_1 = require("../../global_middlewares/admin-middleware"); // Импортируем функцию для очистки базы данных
 exports.testingRouter = (0, express_1.Router)();
-exports.testingRouter.delete('/all-data', (req, res) => __awaiter(void 0, void 0, void 0, function* () {
-    // Очищаем коллекцию блогов
-    yield mongoDb_1.blogsCollection.deleteMany({});
-    console.log("Все блоги были удалены из коллекции.");
-    // Очищаем коллекцию постов
-    yield mongoDb_1.postsCollection.deleteMany({});
-    console.log("Все посты были удалены из коллекции.");
-    // Возвращаем статус 204 без содержимого
-    res.sendStatus(204);
+exports.testingRouter.delete('/all-data', admin_middleware_1.adminMiddleware, (req, res) => __awaiter(void 0, void 0, void 0, function* () {
+    // Эндпоинт для удаления всех данных из базы данных
+    try {
+        const db = mongoDb_1.client.db("blogs-platform");
+        yield db.command({ ping: 1 }); // Проверка на подключение по выполнению команды ping
+        yield (0, mongoDb_2.clearDatabase)(db);
+        console.log("DELETE"); // Вызываем функцию очистки базы данных
+        res.sendStatus(204); // Возвращаем статус 204
+    }
+    catch (err) {
+        console.error("Ошибка при удалении всех данных:", err);
+        res.status(500).send("Ошибка сервера"); // Возвращаем статус 500 в случае ошибки
+    }
 }));

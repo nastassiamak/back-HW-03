@@ -9,12 +9,12 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
     });
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.postsCollection = exports.blogsCollection = void 0;
+exports.postsCollection = exports.blogsCollection = exports.client = void 0;
 exports.runDb = runDb;
+exports.clearDatabase = clearDatabase;
 exports.disconnectDb = disconnectDb;
 const mongodb_1 = require("mongodb");
 const setting_1 = require("../setting");
-let client;
 function runDb(url) {
     return __awaiter(this, void 0, void 0, function* () {
         console.log("Запуск функции runDb");
@@ -22,10 +22,10 @@ function runDb(url) {
         if (!url) {
             throw new Error("Строка подключения не определена. Пожалуйста, проверьте переменные окружения.");
         }
-        client = new mongodb_1.MongoClient(url);
+        exports.client = new mongodb_1.MongoClient(url);
         try {
-            yield client.connect();
-            const db = client.db("blogs-platform");
+            yield exports.client.connect();
+            const db = exports.client.db("blogs-platform");
             exports.blogsCollection = db.collection(setting_1.SETTINGS.PATH.BLOGS);
             exports.postsCollection = db.collection(setting_1.SETTINGS.PATH.POSTS);
             yield db.command({ ping: 1 });
@@ -34,16 +34,28 @@ function runDb(url) {
         }
         catch (err) {
             console.error("Database connection error:", err);
-            yield client.close();
+            yield exports.client.close();
             return false;
+        }
+    });
+}
+// Функция для очистки всей базы данных
+function clearDatabase(db) {
+    return __awaiter(this, void 0, void 0, function* () {
+        try {
+            yield db.dropDatabase(); // Удаляет всю базу данных
+            console.log("База данных успешно очищена");
+        }
+        catch (err) {
+            console.error("Ошибка при очистке базы данных:", err);
         }
     });
 }
 // Функция для отключения от базы данных
 function disconnectDb() {
     return __awaiter(this, void 0, void 0, function* () {
-        if (client) {
-            yield client.close();
+        if (exports.client) {
+            yield exports.client.close();
             console.log("Database Disconnected");
         }
     });
