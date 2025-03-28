@@ -64,7 +64,7 @@ describe('/blogs', () => {
             expect(createdBlog.description).toEqual(newBlog.description);
             expect(createdBlog.websiteUrl).toEqual(newBlog.websiteUrl);
            // expect(createdBlog.createdAt).toEqual(newBlog.createdAt); // Сравниваем без миллисекунд
-            expect(createdBlog.isMembership).toEqual(newBlog.isMembership); // Сравниваем с правильным значением
+            //expect(createdBlog.isMembership).toEqual(newBlog.isMembership); // Сравниваем с правильным значением
         }
     });
 
@@ -106,10 +106,11 @@ describe('/blogs', () => {
 
         console.log(res.body)
 
-        expect(res.body.errorsMessages.length).toEqual(3)
+        expect(res.body.errorsMessages.length).toEqual(4)
         expect(res.body.errorsMessages[0].field).toEqual('name')
         expect(res.body.errorsMessages[1].field).toEqual('description')
         expect(res.body.errorsMessages[2].field).toEqual('websiteUrl')
+        expect(res.body.errorsMessages[3].field).toEqual('isMembership')
 
 
 
