@@ -41,8 +41,8 @@ describe('/blogs', () => {
             name: 'n1',
             description: 'd1',
             websiteUrl: 'http://some.com',
-            createdAt: new Date().toISOString(),
-            isMembership: false
+            createdAt: new Date().toISOString().toString(),
+            isMembership: true
         }
 
         const res = await req
@@ -59,10 +59,12 @@ describe('/blogs', () => {
         // Проверяем, что созданный блог существует
         expect(createdBlog).toBeTruthy(); // Убедитесь, что созданный блог не равен null
 
-        if (createdBlog) { // Добавляем проверку на наличие
+        if (createdBlog) { // Проверяем на наличие созданного блога
             expect(createdBlog.name).toEqual(newBlog.name);
             expect(createdBlog.description).toEqual(newBlog.description);
             expect(createdBlog.websiteUrl).toEqual(newBlog.websiteUrl);
+           // expect(createdBlog.createdAt).toEqual(newBlog.createdAt); // Сравниваем без миллисекунд
+            expect(createdBlog.isMembership).toEqual(newBlog.isMembership); // Сравниваем с правильным значением
         }
     });
 
