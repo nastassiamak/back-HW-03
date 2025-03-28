@@ -13,9 +13,8 @@ exports.testingRouter = void 0;
 const express_1 = require("express");
 const mongoDb_1 = require("../../db/mongoDb"); // Импортируем client из mongoDb
 const mongoDb_2 = require("../../db/mongoDb");
-const admin_middleware_1 = require("../../global_middlewares/admin-middleware"); // Импортируем функцию для очистки базы данных
 exports.testingRouter = (0, express_1.Router)();
-exports.testingRouter.delete('/all-data', admin_middleware_1.adminMiddleware, (req, res) => __awaiter(void 0, void 0, void 0, function* () {
+exports.testingRouter.delete('/all-data', (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     // Эндпоинт для удаления всех данных из базы данных
     try {
         const db = mongoDb_1.client.db("blogs-platform");

@@ -5,7 +5,7 @@ import {adminMiddleware} from "../../global_middlewares/admin-middleware"; // И
 
 export const testingRouter = Router();
 
-testingRouter.delete('/all-data', adminMiddleware, async (req, res) => {
+testingRouter.delete('/all-data', async (req, res) => {
     // Эндпоинт для удаления всех данных из базы данных
 
     try {
