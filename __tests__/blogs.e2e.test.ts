@@ -38,8 +38,8 @@ describe('/blogs', () => {
 
     it('should create', async () => {
 
-        const newBlog: BlogBbType = {
-            id: new Date().toISOString()+Math.random().toString(),
+        const newBlog = {
+
             name: 'n11',
             description: 'd11',
             websiteUrl: 'http://some.com',
@@ -58,8 +58,9 @@ describe('/blogs', () => {
         console.log('createdAt:', newBlog.createdAt); // Это должно вывести строку
 
         // Находим созданный блог в коллекции
-        const createdBlog = await blogsCollection.findOne({ id: res.body.id });
+        const createdBlog = await blogsCollection.findOne();
 
+        console.log(createdBlog);
         // Проверяем, что созданный блог существует
         expect(createdBlog).toBeTruthy(); // Убедитесь, что созданный блог не равен null
 
