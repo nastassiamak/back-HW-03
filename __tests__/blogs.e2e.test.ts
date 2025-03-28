@@ -54,6 +54,7 @@ describe('/blogs', () => {
             .expect(HTTP_STATUSES.CREATED_201)
 
         console.log(res.body)
+
         console.log('isMembership:', newBlog.isMembership); // Это выведет 'false'
         console.log('createdAt:', newBlog.createdAt); // Это должно вывести строку
 
