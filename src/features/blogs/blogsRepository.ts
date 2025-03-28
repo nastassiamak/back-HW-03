@@ -20,9 +20,18 @@ export const blogsRepository = {
             createdAt: new Date().toISOString(),
             isMembership: false,
         }
+        try {
+            // Пытаемся вставить новый блог в коллекцию
+            await blogsCollection.insertOne(newBlog);
+        } catch (error) {
+            // Логируем ошибку, если возникла проблема
+            console.error('Error inserting new blog:', error);
+            // Генерируем исключение с более информативным сообщением
+            throw new Error('Failed to create blog');
+        }
 
-        await blogsCollection.insertOne(newBlog);
-        return newBlog
+        return newBlog; // Возвращаем успешно созданный блог
+
     },
 
     //Этот метод находит блог по его ID, переданному в функцию.

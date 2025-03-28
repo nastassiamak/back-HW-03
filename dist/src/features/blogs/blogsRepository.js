@@ -26,8 +26,17 @@ exports.blogsRepository = {
                 createdAt: new Date().toISOString(),
                 isMembership: false,
             };
-            yield mongoDb_1.blogsCollection.insertOne(newBlog);
-            return newBlog;
+            try {
+                // Пытаемся вставить новый блог в коллекцию
+                yield mongoDb_1.blogsCollection.insertOne(newBlog);
+            }
+            catch (error) {
+                // Логируем ошибку, если возникла проблема
+                console.error('Error inserting new blog:', error);
+                // Генерируем исключение с более информативным сообщением
+                throw new Error('Failed to create blog');
+            }
+            return newBlog; // Возвращаем успешно созданный блог
         });
     },
     //Этот метод находит блог по его ID, переданному в функцию.
