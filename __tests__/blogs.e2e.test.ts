@@ -106,7 +106,7 @@ describe('/blogs', () => {
 
         console.log(res.body)
 
-        expect(res.body.errorsMessages.length).toEqual(5)
+        expect(res.body.errorsMessages.length).toEqual(3)
         expect(res.body.errorsMessages[0].field).toEqual('name')
         expect(res.body.errorsMessages[1].field).toEqual('description')
         expect(res.body.errorsMessages[2].field).toEqual('websiteUrl')
