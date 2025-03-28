@@ -41,7 +41,7 @@ describe('/blogs', () => {
             name: 'n1',
             description: 'd1',
             websiteUrl: 'http://some.com',
-            createdAt: new Date().toISOString().toString(),
+            createdAt: new Date().toISOString(),
             isMembership: true
         }
 
@@ -51,7 +51,7 @@ describe('/blogs', () => {
             .send(newBlog) // отправка данных
             .expect(HTTP_STATUSES.CREATED_201)
 
-        //console.log(res.body)
+        console.log(res.body)
 
         // Находим созданный блог в коллекции
         const createdBlog = await blogsCollection.findOne({ id: res.body.id });
