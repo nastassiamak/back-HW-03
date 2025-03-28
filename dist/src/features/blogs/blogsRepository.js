@@ -24,7 +24,7 @@ exports.blogsRepository = {
                 description: blog.description,
                 websiteUrl: blog.websiteUrl,
                 createdAt: new Date().toISOString().toString(),
-                isMembership: true,
+                isMembership: false,
             };
             yield mongoDb_1.blogsCollection.insertOne(newBlog);
             return newBlog;

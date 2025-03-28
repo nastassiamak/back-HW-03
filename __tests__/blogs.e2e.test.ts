@@ -53,8 +53,8 @@ describe('/blogs', () => {
 
         console.log(res.body)
         console.log('isMembership:', newBlog.isMembership); // Это выведет 'false'
-
-        // Находим созданный блог в коллекции
+        console.log('createdAt:', newBlog.createdAt); // Это должно вывести строку
+       // Находим созданный блог в коллекции
         const createdBlog = await blogsCollection.findOne({ id: res.body.id });
 
         // Проверяем, что созданный блог существует
@@ -64,8 +64,8 @@ describe('/blogs', () => {
             expect(createdBlog.name).toEqual(newBlog.name);
             expect(createdBlog.description).toEqual(newBlog.description);
             expect(createdBlog.websiteUrl).toEqual(newBlog.websiteUrl);
-           // expect(createdBlog.createdAt).toEqual(newBlog.createdAt); // Сравниваем без миллисекунд
-           // expect(createdBlog.isMembership).toEqual(false); // Сравниваем с правильным значением
+            expect(createdBlog.createdAt.slice(0, 19)).toEqual(newBlog.createdAt.slice(0, 19)); // Сравниваем без миллисекунд
+           expect(createdBlog.isMembership).toEqual(false); // Сравниваем с правильным значением
         }
     });
 
