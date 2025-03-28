@@ -38,8 +38,8 @@ describe('/blogs', () => {
     it('should create', async () => {
 
         const newBlog = {
-            name: 'n1',
-            description: 'd1',
+            name: 'n11',
+            description: 'd11',
             websiteUrl: 'http://some.com',
             createdAt: new Date().toISOString(),
             isMembership: false
@@ -52,6 +52,7 @@ describe('/blogs', () => {
             .expect(HTTP_STATUSES.CREATED_201)
 
         console.log(res.body)
+        console.log('isMembership:', newBlog.isMembership); // Это выведет 'false'
 
         // Находим созданный блог в коллекции
         const createdBlog = await blogsCollection.findOne({ id: res.body.id });
