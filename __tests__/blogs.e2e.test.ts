@@ -6,6 +6,7 @@ import {req} from "./helpers/test-helpers";
 import {MongoMemoryServer} from "mongodb-memory-server";
 import {blogsCollection, disconnectDb, runDb} from "../src/db/mongoDb";
 import {MongoClient} from "mongodb";
+import {BlogBbType} from "../src/db/blog-db-type";
 
 describe('/blogs', () => {
     let mongoServer: MongoMemoryServer;
@@ -37,7 +38,8 @@ describe('/blogs', () => {
 
     it('should create', async () => {
 
-        const newBlog = {
+        const newBlog: BlogBbType = {
+            id: new Date().toISOString()+Math.random().toString(),
             name: 'n11',
             description: 'd11',
             websiteUrl: 'http://some.com',
@@ -54,7 +56,8 @@ describe('/blogs', () => {
         console.log(res.body)
         console.log('isMembership:', newBlog.isMembership); // Это выведет 'false'
         console.log('createdAt:', newBlog.createdAt); // Это должно вывести строку
-       // Находим созданный блог в коллекции
+
+        // Находим созданный блог в коллекции
         const createdBlog = await blogsCollection.findOne({ id: res.body.id });
 
         // Проверяем, что созданный блог существует
