@@ -42,7 +42,7 @@ describe('/blogs', () => {
             description: 'd1',
             websiteUrl: 'http://some.com',
             createdAt: new Date().toISOString(),
-            isMembership: false
+            isMembership: true
         }
 
         const res = await req
@@ -110,8 +110,6 @@ describe('/blogs', () => {
         expect(res.body.errorsMessages[0].field).toEqual('name')
         expect(res.body.errorsMessages[1].field).toEqual('description')
         expect(res.body.errorsMessages[2].field).toEqual('websiteUrl')
-
-
 
 
 
