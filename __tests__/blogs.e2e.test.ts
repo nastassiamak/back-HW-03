@@ -42,7 +42,7 @@ describe('/blogs', () => {
             description: "description",
             websiteUrl: "https://someurl.com",
             // createdAt: new Date().toISOString(), // Генерация текущего времени в формате ISO
-            // isMembership: false // Установлено значение по умолчанию
+            isMembership: false // Установлено значение по умолчанию
         }
 
         const res = await req
@@ -66,7 +66,7 @@ describe('/blogs', () => {
             expect(createdBlog.description).toEqual(newBlog.description);
             expect(createdBlog.websiteUrl).toEqual(newBlog.websiteUrl);
            //  expect(createdBlog.createdAt.slice(0, 19)).toEqual(newBlog.createdAt.slice(0, 19)); // Сравниваем без миллисекунд
-           // expect(createdBlog.isMembership).toEqual(false); // Сравниваем с правильным значением
+           expect(createdBlog.isMembership).toEqual(false); // Сравниваем с правильным значением
         }
     });
 

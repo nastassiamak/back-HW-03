@@ -23,8 +23,8 @@ exports.blogsRepository = {
                 name: blog.name,
                 description: blog.description,
                 websiteUrl: blog.websiteUrl,
-                createdAt: blog.createdAt || new Date().toISOString(), // Установка на текущее время, если отсутствует
-                isMembership: typeof blog.isMembership === 'boolean' ? blog.isMembership : false // По умолчанию false, если не указан
+                createdAt: new Date().toISOString(),
+                isMembership: false
             };
             try {
                 // Пытаемся вставить новый блог в коллекцию
