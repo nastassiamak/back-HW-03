@@ -1,6 +1,7 @@
 import {BlogInputModel, BlogViewModel} from "../../input-output-type/blog_type";
 import {BlogBbType} from "../../db/blog-db-type";
 import {blogsCollection} from "../../db/mongoDb";
+import {ObjectId} from "mongodb";
 
 
 
@@ -13,7 +14,7 @@ export const blogsRepository = {
         }
 
         const newBlog = {
-            id: new Date().toISOString()+Math.random().toString(),
+            id: new ObjectId().toString(),
             name: blog.name,
             description: blog.description,
             websiteUrl: blog.websiteUrl,
@@ -67,6 +68,7 @@ export const blogsRepository = {
     //Этот метод преобразует BlogDbType в BlogViewModel, индивидуально выбирая нужные поля для вывода.
     map(blog: BlogBbType) {
         const blogForOutput: BlogViewModel = {
+
             id: blog.id,
             description: blog.description,
             websiteUrl: blog.websiteUrl,

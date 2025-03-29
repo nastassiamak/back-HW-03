@@ -11,6 +11,7 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.blogsRepository = void 0;
 const mongoDb_1 = require("../../db/mongoDb");
+const mongodb_1 = require("mongodb");
 exports.blogsRepository = {
     create(blog) {
         return __awaiter(this, void 0, void 0, function* () {
@@ -19,7 +20,7 @@ exports.blogsRepository = {
                 throw new Error("blogsCollection не инициализирована.");
             }
             const newBlog = {
-                id: new Date().toISOString() + Math.random().toString(),
+                id: new mongodb_1.ObjectId().toString(),
                 name: blog.name,
                 description: blog.description,
                 websiteUrl: blog.websiteUrl,
