@@ -38,10 +38,11 @@ describe('/blogs', () => {
     it('should create', async () => {
 
         const newBlog = {
+            id: new Date().toISOString() + Math.random().toString(),
             name: "new blog",
             description: "description",
             websiteUrl: "https://someurl.com",
-            // createdAt: new Date().toISOString(), // Генерация текущего времени в формате ISO
+            createdAt: new Date().toISOString(), // Генерация текущего времени в формате ISO
             isMembership: false // Установлено значение по умолчанию
         }
 
