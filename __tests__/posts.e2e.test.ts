@@ -4,34 +4,27 @@ import {PostInputModel} from "../src/input-output-type/post_type";
 import {req} from "./helpers/test-helpers";
 import {SETTINGS} from "../src/setting";
 import {blogsCollection, disconnectDb, postsCollection, runDb} from "../src/db/mongoDb";
-import {MongoClient, ObjectId} from "mongodb";
+import {MongoClient} from "mongodb";
 import {MongoMemoryServer} from "mongodb-memory-server";
 
 let mongoServer: MongoMemoryServer;
 let client: MongoClient
 
 describe('/posts', () => {
-    let mongoServer: MongoMemoryServer;
-    let client: MongoClient;
-
     beforeAll(async () => {
-        // Создаем экземпляр MongoMemoryServer
         mongoServer = await MongoMemoryServer.create();
         const uri = mongoServer.getUri();
-        client = new MongoClient(uri);
-
-
-        // Подключаемся к временной базе данных
-        await client.connect();
-        await runDb(uri); // Инициализация базы данных
-
+        await runDb(uri)
     });
 
     afterAll(async () => {
-        await disconnectDb(); // Отключаемся от базы данных
+        await disconnectDb();
         await mongoServer.stop(); // Останавливаем сервер
     });
     beforeEach(async () => {
+        //await blogsCollection.insertMany(dataset1.blogs); // добавление блогов перед каждым тестом
+        //await blogsCollection.insertMany(dataset2.blogs); //
+        //await blogsCollection.deleteMany({}); // Очищаем коллекцию блогов
         await postsCollection.deleteMany({}); // Очищаем коллекцию постов
     });
 
@@ -42,7 +35,7 @@ describe('/posts', () => {
             title: 't1',
             shortDescription: 's1',
             content: 'c1',
-            blogId: dataset1.blogs[0]._id,
+            blogId: dataset1.blogs[0].id,
         }
 
         const res = await req
@@ -52,7 +45,13 @@ describe('/posts', () => {
             .expect(HTTP_STATUSES.CREATED_201)
 
         console.log(res.body)
-
+        // Ожидания
+        expect(res.body.title).toEqual(newPost.title);
+        expect(res.body.shortDescription).toEqual(newPost.shortDescription);
+        expect(res.body.content).toEqual(newPost.content);
+        expect(res.body.blogId).toEqual(newPost.blogId);
+        expect(res.body.blogName).toEqual(dataset1.blogs[0].name);
+        expect(typeof res.body.id).toEqual('string');
 
         const postsInDb = await postsCollection.find({}).toArray();
         expect(postsInDb.length).toEqual(1); // Проверка, что пост действительно создан
@@ -66,7 +65,7 @@ describe('/posts', () => {
             title: 't1',
             shortDescription: 's1',
             content: 'c1',
-            blogId: dataset1.blogs[0]._id,
+            blogId: dataset1.blogs[0].id,
         }
         const res = await req
             .post(SETTINGS.PATH.POSTS)
@@ -87,7 +86,7 @@ describe('/posts', () => {
             title: createString(31),
             content: createString(1001),
             shortDescription: createString(101),
-            blogId: new ObjectId(),
+            blogId: '1',
         }
         const res = await req
             .post(SETTINGS.PATH.POSTS)
@@ -206,7 +205,7 @@ describe('/posts', () => {
             title: 't2',
             shortDescription: 's2',
             content: 'c2',
-            blogId: dataset2.blogs[0]._id,
+            blogId: dataset2.blogs[0].id,
         }
 
         const res = await req
@@ -220,7 +219,17 @@ describe('/posts', () => {
         const updatedPost = await postsCollection.findOne({ id: dataset2.posts[0].id}); // Получаем обновленный блог из БД
 
 
+        if (updatedPost) {
+            // Проверяем каждое поле на соответствие
+            expect(updatedPost.title).toEqual(post.title);
+            expect(updatedPost.shortDescription).toEqual(post.shortDescription);
+            expect(updatedPost.content).toEqual(post.content);
+            expect(updatedPost.blogId).toEqual(post.blogId);
 
+            // expect(updatedPost.name).toEqual(blog.name);
+            // expect(updatedPost.description).toEqual(blog.description);
+            // expect(updatedPost.websiteUrl).toEqual(blog.websiteUrl);
+       }
     })
 
     it('shouldn\'t update 404', async () => {
@@ -229,7 +238,7 @@ describe('/posts', () => {
             title: 't1',
             shortDescription: 's1',
             content:'c1',
-            blogId: dataset1.blogs[0]._id,
+            blogId: dataset1.blogs[0].id,
         }
 
         const res = await req
@@ -248,7 +257,7 @@ describe('/posts', () => {
             title: createString(31),
             content: createString(1001),
             shortDescription: createString(101),
-            blogId: new ObjectId(),
+            blogId: '1',
         }
 
         const res = await req
@@ -280,7 +289,7 @@ describe('/posts', () => {
             title: createString(31),
             content: createString(1001),
             shortDescription: createString(101),
-            blogId: new ObjectId(),
+            blogId: '1',
         }
 
         const res = await req

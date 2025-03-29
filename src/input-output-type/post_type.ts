@@ -6,7 +6,7 @@ export type PostViewModel = {
     title: string;
     shortDescription: string;
     content: string;
-    blogId: ObjectId;
+    blogId: string;
     blogName: string;
     createdAt?: string;
 }
@@ -16,7 +16,7 @@ export type PostInputModel = {
     title: string; //maxLength: 30
     shortDescription: string; //maxLength: 100
     content: string; //maxLength: 1000
-    blogId: ObjectId;
+    blogId: string;
 
 }
 

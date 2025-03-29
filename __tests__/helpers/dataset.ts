@@ -22,8 +22,8 @@ export const createString = (length: number) => {
 
 
 export const blog1: BlogBbType = {
-    //id: new Date().toISOString() + Math.random(),
-    _id: new ObjectId(),
+    id: new Date().toISOString() + Math.random(),
+
     name: 'n11',
     description: 'd11',
     websiteUrl: 'http://example11.com',
@@ -32,8 +32,8 @@ export const blog1: BlogBbType = {
 } as const // dataset нельзя изменять
 
 export const blog5: BlogBbType = {
-    //id: new Date().toISOString() + Math.random(),
-    _id: new ObjectId(),
+    id: new Date().toISOString() + Math.random(),
+
     name: 'name5',
     description: 'description5',
     websiteUrl: 'http://example5.com',
@@ -42,8 +42,8 @@ export const blog5: BlogBbType = {
 } as const // dataset нельзя изменять
 
 export const blog6: BlogBbType = {
-    //id: new Date().toISOString() + Math.random(),
-    _id: new ObjectId(),
+    id: new Date().toISOString() + Math.random(),
+
     name: 'name6',
     description: 'description6',
     websiteUrl: 'http://example6.com',
@@ -56,7 +56,7 @@ export const post1: PostDBType ={
     title: 't1',
     shortDescription: 's1',
     content: 'c1',
-    blogId: blog1._id,
+    blogId: blog1.id,
     blogName: 'n1',
     createdAt: new Date().toISOString()
 
@@ -66,7 +66,7 @@ export const post2: PostDBType ={
     title: 't2',
     shortDescription: 's2',
     content: 'c2',
-    blogId: blog5._id,
+    blogId: blog5.id,
     blogName: 'name5',
     createdAt: new Date().toISOString()
 

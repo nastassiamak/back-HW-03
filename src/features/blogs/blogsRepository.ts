@@ -14,8 +14,8 @@ export const blogsRepository = {
         }
 
         const newBlog = {
-            //id: new Date().toISOString()+Math.random().toString(),
-            _id: new ObjectId(),  // Генерация нового ObjectId
+            id: new Date().toISOString()+Math.random().toString(),
+
             name: blog.name,
             description: blog.description,
             websiteUrl: blog.websiteUrl,
@@ -37,13 +37,13 @@ export const blogsRepository = {
     },
 
     async find(id: string) {
-        return await blogsCollection.findOne({ _id: new ObjectId(id) })
+        return await blogsCollection.findOne({ id: id })
     },
 
-    // async findAndMap(id: string) {
-    //     const blogs = await this.find(id);// использовать этот метод если проверили существование
-    //     return blogs ? this.map(blogs) : undefined
-    // },
+    async findAndMap(id: string) {
+        const blogs = await this.find(id);// использовать этот метод если проверили существование
+        return blogs ? this.map(blogs) : undefined
+    },
 
     //Этот метод должен возвращать все блоги.
     async getAll(){
@@ -52,21 +52,21 @@ export const blogsRepository = {
 
     //Метод для удаления блога по ID.
     async del(id: string) {
-        const result = await blogsCollection.deleteOne({ _id: new ObjectId(id) });
+        const result = await blogsCollection.deleteOne({ id: id });
         return result.deletedCount ? {id}: null
     },
 
     //Метод для обновления существующего блога по ID.
     async put(blog: BlogInputModel, id: string) {
         const result = await blogsCollection
-            .updateOne({ _id: new ObjectId(id) }, {$set: blog });
+            .updateOne({ id:id }, {$set: blog });
         return result.modifiedCount ? {id}: null
     },
 
     //Этот метод преобразует BlogDbType в BlogViewModel, индивидуально выбирая нужные поля для вывода.
     map(blog: BlogBbType): BlogViewModel {
         return {
-            _id: blog._id, // Возвращаем _id как строку
+            id: blog.id, // Возвращаем _id как строку
             name: blog.name,
             description: blog.description,
             websiteUrl: blog.websiteUrl,
