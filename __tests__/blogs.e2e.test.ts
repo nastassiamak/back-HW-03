@@ -5,7 +5,7 @@ import {codedAuth, createString, dataset1} from "./helpers/dataset";
 import {req} from "./helpers/test-helpers";
 import {MongoMemoryServer} from "mongodb-memory-server";
 import {blogsCollection, disconnectDb, runDb} from "../src/db/mongoDb";
-import {MongoClient} from "mongodb";
+import {MongoClient, ObjectId} from "mongodb";
 
 describe('/blogs', () => {
     let mongoServer: MongoMemoryServer;
@@ -62,10 +62,11 @@ describe('/blogs', () => {
         expect(createdBlog).toBeTruthy(); // Убедитесь, что созданный блог не равен null
 
         if (createdBlog) { // Проверяем на наличие созданного блога
+
             expect(createdBlog.name).toEqual(newBlog.name);
             expect(createdBlog.description).toEqual(newBlog.description);
             expect(createdBlog.websiteUrl).toEqual(newBlog.websiteUrl);
-           //  expect(createdBlog.createdAt.slice(0, 19)).toEqual(newBlog.createdAt.slice(0, 19)); // Сравниваем без миллисекунд
+            expect(createdBlog.createdAt).toBeDefined();
            expect(createdBlog.isMembership).toEqual(false); // Сравниваем с правильным значением
         }
     });
@@ -152,7 +153,7 @@ describe('/blogs', () => {
         //await blogsCollection.insertMany(dataset1.blogs);
 
         const res = await req
-            .get(SETTINGS.PATH.BLOGS + '/1')
+            .get(SETTINGS.PATH.BLOGS + '/' + new ObjectId().toString())
             .expect(HTTP_STATUSES.NOT_FOUND_404) // проверка на ошибку
 
         console.log(res.body)
@@ -162,11 +163,11 @@ describe('/blogs', () => {
         await blogsCollection.insertMany(dataset1.blogs);
 
         const res = await req
-            .get(SETTINGS.PATH.BLOGS + '/' + dataset1.blogs[0].id)
+            .get(SETTINGS.PATH.BLOGS + '/' + dataset1.blogs[0]._id)
             .expect(HTTP_STATUSES.OK_200) // проверка на ошибку
 
         console.log(res.body)
-        const blogsInDb = await blogsCollection.findOne({id: res.body.id});
+        const blogsInDb = await blogsCollection.findOne({ _id: new ObjectId(res.body._id) });
        expect(blogsInDb).toEqual(dataset1.blogs[0])
     })
 
@@ -176,7 +177,7 @@ describe('/blogs', () => {
         await blogsCollection.insertMany(dataset1.blogs);
 
         const res = await req
-            .delete(SETTINGS.PATH.BLOGS + '/' + dataset1.blogs[0].id)
+            .delete(SETTINGS.PATH.BLOGS + '/' + dataset1.blogs[0]._id)
             .set({'Authorization': 'Basic ' + codedAuth})
             .expect(HTTP_STATUSES.NO_CONTENT_204) // проверка на ошибку
 
@@ -189,11 +190,11 @@ describe('/blogs', () => {
         await blogsCollection.deleteMany({});
 
         const res = await req
-            .delete(SETTINGS.PATH.BLOGS + '/1')
+            .delete(SETTINGS.PATH.BLOGS + '/' + new ObjectId().toString())
             .set({'Authorization': 'Basic ' + codedAuth})
             .expect(HTTP_STATUSES.NOT_FOUND_404) // проверка на ошибку
 
-        //console.log(res.body)
+        console.log(res.body)
     })
 
     it('shouldn\'t del 401', async () => {
@@ -224,14 +225,14 @@ describe('/blogs', () => {
         }
 
         const res = await req
-            .put(SETTINGS.PATH.BLOGS + '/' + dataset1.blogs[0].id)
+            .put(SETTINGS.PATH.BLOGS + '/' + dataset1.blogs[0]._id)
             .set({'Authorization': 'Basic ' + codedAuth})
             .send(blog)
             .expect(HTTP_STATUSES.NO_CONTENT_204) // проверка на ошибку
 
         console.log(res.body)
         // Убедитесь, что обновленный объект соответствует изменениям в базе данных
-        const updatedBlog = await blogsCollection.findOne({ id: dataset1.blogs[0].id }); // Получаем обновленный блог из БД
+        const updatedBlog = await blogsCollection.findOne({ _id: dataset1.blogs[0]._id }); // Получаем обновленный блог из БД
         expect(updatedBlog).not.toBeNull(); // Проверяем, что блог существует
 
         if (updatedBlog) {
@@ -255,7 +256,7 @@ describe('/blogs', () => {
         }
 
         const res = await req
-            .put(SETTINGS.PATH.BLOGS + '/1')
+            .put(SETTINGS.PATH.BLOGS + '/' + new ObjectId().toString())
             .set({'Authorization': 'Basic ' + codedAuth})
             .send(blog)
             .expect(HTTP_STATUSES.NOT_FOUND_404) // проверка на ошибку
@@ -275,7 +276,7 @@ describe('/blogs', () => {
         }
 
         const res = await req
-            .put(SETTINGS.PATH.BLOGS + '/' + dataset1.blogs[0].id)
+            .put(SETTINGS.PATH.BLOGS + '/' + dataset1.blogs[0]._id)
             .set({'Authorization': 'Basic ' + codedAuth})
             .send(blog)
             .expect(HTTP_STATUSES.BAD_REQUEST_400) // проверка на ошибку
@@ -300,7 +301,7 @@ describe('/blogs', () => {
         }
 
         const res = await req
-            .put(SETTINGS.PATH.BLOGS + '/' + dataset1.blogs[0].id)
+            .put(SETTINGS.PATH.BLOGS + '/' + dataset1.blogs[0]._id)
             .set({'Authorization': 'Basic ' + codedAuth + 'error'})
             .send(blog)
             .expect(HTTP_STATUSES.UNAUTHORIZED_401) // проверка на ошибку

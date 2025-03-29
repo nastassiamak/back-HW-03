@@ -4,17 +4,12 @@ import {db, HTTP_STATUSES} from "../../../db/db";
 import {blogsRepository} from "../blogsRepository";
 
 export const createBlogController = async (req: Request<any, any, BlogInputModel>,
-                                     res:Response<BlogViewModel>) =>{
-        const newBlogId = await blogsRepository.create(req.body)
+                                     res:Response<BlogViewModel>) => {
+        const newBlog = await blogsRepository.create(req.body);
 
-        if(!newBlogId){
-                res
-                    .status(HTTP_STATUSES.BAD_REQUEST_400)
+        if (newBlog) {
+                res.status(HTTP_STATUSES.CREATED_201).json(newBlog);
         } else {
-                const newBlog = await blogsRepository.findAndMap(newBlogId.id)
-
-                res
-                    .status(HTTP_STATUSES.CREATED_201)
-                    .json(newBlog)
+                res.status(HTTP_STATUSES.BAD_REQUEST_400);
         }
 }

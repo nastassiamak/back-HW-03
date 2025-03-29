@@ -20,7 +20,8 @@ exports.blogsRepository = {
                 throw new Error("blogsCollection не инициализирована.");
             }
             const newBlog = {
-                id: new mongodb_1.ObjectId().toString(),
+                //id: new Date().toISOString()+Math.random().toString(),
+                _id: new mongodb_1.ObjectId(), // Генерация нового ObjectId
                 name: blog.name,
                 description: blog.description,
                 websiteUrl: blog.websiteUrl,
@@ -44,7 +45,7 @@ exports.blogsRepository = {
     //Если блог найден, он будет возвращен, в противном случае — undefined.
     find(id) {
         return __awaiter(this, void 0, void 0, function* () {
-            return yield mongoDb_1.blogsCollection.findOne({ id });
+            return yield mongoDb_1.blogsCollection.findOne({ _id: new mongodb_1.ObjectId(id) });
         });
     },
     findAndMap(id) {
@@ -62,7 +63,7 @@ exports.blogsRepository = {
     //Метод для удаления блога по ID.
     del(id) {
         return __awaiter(this, void 0, void 0, function* () {
-            const result = yield mongoDb_1.blogsCollection.deleteOne({ id: id });
+            const result = yield mongoDb_1.blogsCollection.deleteOne({ _id: new mongodb_1.ObjectId(id) });
             return result.deletedCount ? { id } : null;
         });
     },
@@ -70,20 +71,19 @@ exports.blogsRepository = {
     put(blog, id) {
         return __awaiter(this, void 0, void 0, function* () {
             const result = yield mongoDb_1.blogsCollection
-                .updateOne({ id }, { $set: blog });
+                .updateOne({ _id: new mongodb_1.ObjectId(id) }, { $set: blog });
             return result.modifiedCount ? { id } : null;
         });
     },
     //Этот метод преобразует BlogDbType в BlogViewModel, индивидуально выбирая нужные поля для вывода.
     map(blog) {
-        const blogForOutput = {
-            id: blog.id,
+        return {
+            _id: blog._id, // Возвращаем _id как строку
+            name: blog.name,
             description: blog.description,
             websiteUrl: blog.websiteUrl,
-            name: blog.name,
             createdAt: blog.createdAt,
             isMembership: blog.isMembership,
         };
-        return blogForOutput;
-    },
+    }
 };

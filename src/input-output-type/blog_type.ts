@@ -1,8 +1,8 @@
 import {ObjectId} from "mongodb";
 
 export type BlogViewModel = {
-
-    id: string;
+    _id: ObjectId;
+    id?: string;
     name: string;
     description: string;
     websiteUrl: string;

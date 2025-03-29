@@ -9,7 +9,7 @@ import {BlogBbType} from "../../db/blog-db-type";
 
 export const postsRepository = {
     async create(post: PostInputModel):Promise<PostDBType> {
-        const blog = await blogsRepository.find(post.blogId);
+        const blog = await blogsRepository.find(post.blogId.toString());
         const blogName = blog ? blog.name : "Неизвестный блог"; // Поверяем и устанавливаем значение по умолчанию
         const newPost: PostDBType  = {
             id: new Date().toString() + Math.random(),
@@ -49,7 +49,7 @@ export const postsRepository = {
     },
 
     async put(post: PostInputModel, id: string) {
-        const blog = await blogsRepository.find(post.blogId);
+        const blog = await blogsRepository.find(post.blogId.toString());
         if (!blog) {
             return null;
         }

@@ -4,6 +4,7 @@ Object.defineProperty(exports, "__esModule", { value: true });
 exports.dataset2 = exports.dataset1 = exports.post2 = exports.post1 = exports.blog6 = exports.blog5 = exports.blog1 = exports.createString = exports.codedAuth = void 0;
 const setting_1 = require("../../src/setting");
 const admin_middleware_1 = require("../../src/global_middlewares/admin-middleware");
+const mongodb_1 = require("mongodb");
 exports.codedAuth = (0, admin_middleware_1.fromUTF8ToBase64)(setting_1.SETTINGS.ADMIN);
 const createString = (length) => {
     let s = '';
@@ -14,7 +15,8 @@ const createString = (length) => {
 };
 exports.createString = createString;
 exports.blog1 = {
-    id: new Date().toISOString() + Math.random(),
+    //id: new Date().toISOString() + Math.random(),
+    _id: new mongodb_1.ObjectId(),
     name: 'n1',
     description: 'd1',
     websiteUrl: 'http://example1.com',
@@ -22,7 +24,8 @@ exports.blog1 = {
     isMembership: false
 }; // dataset нельзя изменять
 exports.blog5 = {
-    id: new Date().toISOString() + Math.random(),
+    //id: new Date().toISOString() + Math.random(),
+    _id: new mongodb_1.ObjectId(),
     name: 'name5',
     description: 'description5',
     websiteUrl: 'http://example5.com',
@@ -30,7 +33,8 @@ exports.blog5 = {
     isMembership: false
 }; // dataset нельзя изменять
 exports.blog6 = {
-    id: new Date().toISOString() + Math.random(),
+    //id: new Date().toISOString() + Math.random(),
+    _id: new mongodb_1.ObjectId(),
     name: 'name6',
     description: 'description6',
     websiteUrl: 'http://example6.com',
@@ -42,7 +46,7 @@ exports.post1 = {
     title: 't1',
     shortDescription: 's1',
     content: 'c1',
-    blogId: exports.blog1.id,
+    blogId: exports.blog1._id,
     blogName: 'n1',
     createdAt: new Date().toISOString()
 };
@@ -51,7 +55,7 @@ exports.post2 = {
     title: 't2',
     shortDescription: 's2',
     content: 'c2',
-    blogId: exports.blog5.id,
+    blogId: exports.blog5._id,
     blogName: 'name5',
     createdAt: new Date().toISOString()
 };
