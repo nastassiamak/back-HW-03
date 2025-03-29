@@ -47,8 +47,10 @@ export const blogsRepository = {
 
     //Этот метод должен возвращать все блоги.
     async getAll(){
-      return await blogsCollection.find().toArray();
+      return await blogsCollection.find({}, { projection: { _id: 0 } }).toArray();
+
     },
+
 
     //Метод для удаления блога по ID.
     async del(id: string) {
