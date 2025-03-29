@@ -2,8 +2,9 @@ import {Request, Response} from "express";
 import {BlogViewModel, BlogInputModel} from "../../../input-output-type/blog_type";
 import {db, HTTP_STATUSES} from "../../../db/db";
 import {blogsRepository} from "../blogsRepository";
+import {BlogBbType} from "../../../db/blog-db-type";
 
-export const createBlogController = async (req: Request<any, any, BlogInputModel>,
+export const createBlogController = async (req: Request<any, any, BlogBbType>,
                                      res:Response<BlogViewModel>) =>{
         const newBlogId = await blogsRepository.create(req.body)
 

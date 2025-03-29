@@ -25,6 +25,7 @@ export const websiteUrlValidator = body('websiteUrl')
     .isLength({min: 1, max: 100}).withMessage('more then 100 or 0');
 
 export const createdAtValidator = body('createdAt')
+    .optional() // Делает поле необязательным
     .isString()
     .withMessage('not string')
     .trim()
@@ -32,6 +33,7 @@ export const createdAtValidator = body('createdAt')
     .withMessage('not valid date format');
 
 export const isMembershipValidator = body('isMembership')
+    .optional() // Делает поле необязательным
     .isBoolean().withMessage('must be a boolean')
     .toBoolean(); // Опционально, чтобы преобразовать входное значение в булевый тип
 

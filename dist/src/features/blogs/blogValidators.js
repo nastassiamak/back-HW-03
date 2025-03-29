@@ -30,12 +30,14 @@ exports.websiteUrlValidator = (0, express_validator_1.body)('websiteUrl')
     .trim().isURL().withMessage('not url')
     .isLength({ min: 1, max: 100 }).withMessage('more then 100 or 0');
 exports.createdAtValidator = (0, express_validator_1.body)('createdAt')
+    .optional() // Делает поле необязательным
     .isString()
     .withMessage('not string')
     .trim()
     .matches(/^\d{4}-[01]\d-[0-3]\dT[0-2]\d:[0-5]\d:[0-5]\d(\.\d+)?([+-][0-2]\d:[0-5]\d|Z)$/)
     .withMessage('not valid date format');
 exports.isMembershipValidator = (0, express_validator_1.body)('isMembership')
+    .optional() // Делает поле необязательным
     .isBoolean().withMessage('must be a boolean')
     .toBoolean(); // Опционально, чтобы преобразовать входное значение в булевый тип
 const findBlogValidator = (req, res, next) => __awaiter(void 0, void 0, void 0, function* () {

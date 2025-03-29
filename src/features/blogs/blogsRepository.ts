@@ -6,7 +6,7 @@ import {blogsCollection} from "../../db/mongoDb";
 
 export const blogsRepository = {
 
-    async create(blog: BlogInputModel) {
+    async create(blog: BlogBbType) {
         // Убедитесь, что коллекция инициализирована
         if (!blogsCollection) {
             throw new Error("blogsCollection не инициализирована.");
@@ -17,8 +17,8 @@ export const blogsRepository = {
             name: blog.name,
             description: blog.description,
             websiteUrl: blog.websiteUrl,
-            createdAt: new Date().toISOString(),
-            isMembership: false,
+            createdAt: blog.createdAt || new Date().toISOString(), // Установка на текущее время, если отсутствует
+            isMembership: typeof blog.isMembership === 'boolean' ? blog.isMembership : false // По умолчанию false, если не указан
         }
         try {
             // Пытаемся вставить новый блог в коллекцию
