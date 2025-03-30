@@ -15,7 +15,7 @@ const mongoDb_1 = require("../../db/mongoDb");
 exports.postsRepository = {
     create(post) {
         return __awaiter(this, void 0, void 0, function* () {
-            const blog = yield blogsRepository_1.blogsRepository.find(post.blogId);
+            const blog = yield blogsRepository_1.blogsRepository.find(post.blogId.toString());
             const blogName = blog ? blog.name : "Неизвестный блог"; // Поверяем и устанавливаем значение по умолчанию
             const newPost = {
                 id: new Date().toString() + Math.random(),
@@ -61,7 +61,7 @@ exports.postsRepository = {
     },
     put(post, id) {
         return __awaiter(this, void 0, void 0, function* () {
-            const blog = yield blogsRepository_1.blogsRepository.find(post.blogId);
+            const blog = yield blogsRepository_1.blogsRepository.find(post.blogId.toString());
             if (!blog) {
                 return null;
             }

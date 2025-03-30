@@ -124,30 +124,37 @@ describe('/blogs', () => {
     })
 
     it('should get empty array', async () => {
-       await blogsCollection.deleteMany({});
+      // await blogsCollection.deleteMany({});
 
         const res = await req
             .get(SETTINGS.PATH.BLOGS)
             .expect(HTTP_STATUSES.OK_200) // проверяем наличие эндпоинта
 
         console.log(res.body) // можно посмотреть ответ эндпоинта
-        const blogsInDb = await blogsCollection.find().toArray();
+        const blogsInDb = await blogsCollection.find({projection: { _id: 0 }}).toArray();
         expect(blogsInDb.length).toEqual(0) // проверяем ответ эндпоинта
     })
 
     it('should get not empty array', async () => {
-        //await blogsCollection.insertMany(dataset1.blogs);
+        // Вставляем блоги перед выполнением теста
+        await blogsCollection.insertMany(dataset1.blogs);
 
         const res = await req
             .get(SETTINGS.PATH.BLOGS)
-            .expect(HTTP_STATUSES.OK_200)
+            .expect(HTTP_STATUSES.OK_200);
 
-        console.log(res.body)
+        console.log(res.body); // Выводим полученные данные в консоль
 
         const blogsInDb = await blogsCollection.find().toArray();
-        expect(blogsInDb.length).toEqual(0)
-       // expect(blogsInDb[0]).toEqual(dataset1.blogs[0])
-    })
+        console.log(blogsInDb)
+        // Теперь ожидаем, что длина массива не равна нулю
+        expect(blogsInDb.length).toBeGreaterThan(0);
+
+        // Дополнительная проверка, можно снова развернуть эту строку
+        expect(blogsInDb[0]).toEqual(dataset1.blogs[0]); // Проверка на соответствие
+
+
+    });
 
     it('shouldn\'t find', async () => {
         //await blogsCollection.insertMany(dataset1.blogs);
