@@ -37,7 +37,7 @@ export const blogsRepository = {
     },
 
     async find(id: string) {
-        return await blogsCollection.findOne({ id: id })
+        return await blogsCollection.findOne({ id: id }, { projection: { _id: 0 }})
     },
 
     async findAndMap(id: string) {

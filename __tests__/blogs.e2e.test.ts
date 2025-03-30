@@ -55,7 +55,7 @@ describe('/blogs', () => {
 
 
         // Находим созданный блог в коллекции
-        const createdBlog = await blogsCollection.findOne({id: res.body.id},{projection: { _id: 0 }});
+        const createdBlog = await blogsCollection.findOne({id: res.body.id});
 
         console.log(createdBlog);
         // Проверяем, что созданный блог существует
