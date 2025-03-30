@@ -8,34 +8,32 @@ import {ObjectId} from "mongodb";
 export const blogsRepository = {
 
     async create(blog: BlogInputModel) {
+        // Убедитесь, что коллекция инициализирована
         if (!blogsCollection) {
             throw new Error("blogsCollection не инициализирована.");
         }
 
         const newBlog = {
-            id: new Date().toISOString() + Math.random().toString(),
+            id: new Date().toISOString()+Math.random().toString(),
+
             name: blog.name,
             description: blog.description,
             websiteUrl: blog.websiteUrl,
             createdAt: new Date().toISOString(),
-            isMembership: false
-        };
-
+            isMembership:  false
+        }
         try {
-            // Вставляем новый блог и получаем результат
-            const result = await blogsCollection.insertOne(newBlog);
-
-            // Получаем _id из результата и добавляем его к объекту newBlog
-            const createdBlog = {
-                ...newBlog,
-                _id: result.insertedId.toString() // Преобразуем _id в строку
-            };
-
-            return createdBlog;
+            // Пытаемся вставить новый блог в коллекцию
+            await blogsCollection.insertOne(newBlog);
         } catch (error) {
+            // Логируем ошибку, если возникла проблема
             console.error('Error inserting new blog:', error);
+            // Генерируем исключение с более информативным сообщением
             throw new Error('Failed to create blog');
         }
+
+        return newBlog; // Возвращаем успешно созданный блог
+
     },
 
     async find(id: string) {

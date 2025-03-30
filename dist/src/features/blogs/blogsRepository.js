@@ -14,6 +14,7 @@ const mongoDb_1 = require("../../db/mongoDb");
 exports.blogsRepository = {
     create(blog) {
         return __awaiter(this, void 0, void 0, function* () {
+            // Убедитесь, что коллекция инициализирована
             if (!mongoDb_1.blogsCollection) {
                 throw new Error("blogsCollection не инициализирована.");
             }
@@ -26,17 +27,16 @@ exports.blogsRepository = {
                 isMembership: false
             };
             try {
-                // Вставляем новый блог и получаем результат
-                const result = yield mongoDb_1.blogsCollection.insertOne(newBlog);
-                // Получаем _id из результата и добавляем его к объекту newBlog
-                const createdBlog = Object.assign(Object.assign({}, newBlog), { _id: result.insertedId.toString() // Преобразуем _id в строку
-                 });
-                return createdBlog;
+                // Пытаемся вставить новый блог в коллекцию
+                yield mongoDb_1.blogsCollection.insertOne(newBlog);
             }
             catch (error) {
+                // Логируем ошибку, если возникла проблема
                 console.error('Error inserting new blog:', error);
+                // Генерируем исключение с более информативным сообщением
                 throw new Error('Failed to create blog');
             }
+            return newBlog; // Возвращаем успешно созданный блог
         });
     },
     find(id) {

@@ -38,6 +38,7 @@ describe('/blogs', () => {
     it('should create', async () => {
 
         const newBlog = {
+            id: new Date().toISOString() + Math.random().toString(),
             name: "new blog",
             description: "description",
             websiteUrl: "https://someurl.com",
@@ -69,6 +70,64 @@ describe('/blogs', () => {
             expect(createdBlog.createdAt).toBeDefined();
            expect(createdBlog.isMembership).toEqual(false); // Сравниваем с правильным значением
         }
+    });
+    it('should create a blog and return the correct ID', async () => {
+        const newBlog = {
+            // Заполните нужные данные
+            name: "new blog",
+            description: "description",
+            websiteUrl: "https://someurl.com",
+            isMembership: false
+        };
+
+        const res = await req
+            .post(SETTINGS.PATH.BLOGS)
+            .set({'Authorization': 'Basic ' + codedAuth})
+            .send(newBlog)
+            .expect(HTTP_STATUSES.CREATED_201);
+
+        console.log(res.body)
+
+        expect(res.body).toHaveProperty('_id'); // Проверяем наличие поля _id
+
+        return res.body.id; // Или сохраняйте ID для использования в последующих тестах
+    });
+
+    it('should get a blog by ID', async () => {
+        // Создаем новый блог и получаем его ID
+        const newBlogId = await (async () => {
+            const newBlog = {
+                name: "new blog",
+                description: "description",
+                websiteUrl: "https://someurl.com",
+                isMembership: false
+            };
+
+            const res = await req
+                .post(SETTINGS.PATH.BLOGS)
+                .set({'Authorization': 'Basic ' + codedAuth})
+                .send(newBlog)
+                .expect(HTTP_STATUSES.CREATED_201);
+
+            // Вернем ID созданного блога
+            return res.body.id; // Здесь мы предполагаем, что id возвращается в теле ответа
+        })();
+
+
+        const res = await req
+            .get(`${SETTINGS.PATH.BLOGS}/${newBlogId}`) // Используйте полученный ID
+            .expect(HTTP_STATUSES.OK_200);
+
+        // Сравнение с ожидаемыми данными
+        expect(res.body).toStrictEqual({
+            //_id: expect.any(String),
+            id: newBlogId,
+            name: "new blog",
+            description: "description",
+            websiteUrl: "https://someurl.com",
+            isMembership: false,
+            createdAt: expect.any(String) // или конкретная дата, если надо
+        });
     });
 
     it('shouldn\'t create 401', async () => {
