@@ -10,71 +10,66 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.blogsRepository = void 0;
-const mongoDb_1 = require("../../db/mongoDb");
+const mongoDb_1 = require("../../db/mongoDb"); // Подключите к своей коллекции
 exports.blogsRepository = {
     create(blog) {
         return __awaiter(this, void 0, void 0, function* () {
-            // Убедитесь, что коллекция инициализирована
             if (!mongoDb_1.blogsCollection) {
                 throw new Error("blogsCollection не инициализирована.");
             }
+            // Создаем объект нового блога без id
             const newBlog = {
                 id: new Date().toISOString() + Math.random().toString(),
                 name: blog.name,
                 description: blog.description,
                 websiteUrl: blog.websiteUrl,
-                createdAt: new Date().toISOString(),
-                isMembership: false
+                createdAt: new Date().toISOString(), // Генерация текущего времени
+                isMembership: false // Используем значение из blog или false по умолчанию
             };
             try {
-                // Пытаемся вставить новый блог в коллекцию
-                yield mongoDb_1.blogsCollection.insertOne(newBlog);
+                const result = yield mongoDb_1.blogsCollection.insertOne(newBlog);
+                return newBlog;
             }
             catch (error) {
-                // Логируем ошибку, если возникла проблема
                 console.error('Error inserting new blog:', error);
-                // Генерируем исключение с более информативным сообщением
                 throw new Error('Failed to create blog');
             }
-            return newBlog; // Возвращаем успешно созданный блог
         });
     },
     find(id) {
         return __awaiter(this, void 0, void 0, function* () {
-            return yield mongoDb_1.blogsCollection.findOne({ id: id }, { projection: { _id: 0 } });
+            // Поиск по _id (используем ObjectId)
+            const blog = yield mongoDb_1.blogsCollection.findOne({ id: id }, { projection: { _id: 0 } });
+            return blog ? Object.assign(Object.assign({}, blog), { id: blog.id }) : null; // Возвращаем объект с id
         });
     },
     findAndMap(id) {
         return __awaiter(this, void 0, void 0, function* () {
-            const blogs = yield this.find(id); // использовать этот метод если проверили существование
-            return blogs ? this.map(blogs) : undefined;
+            const blog = yield this.find(id);
+            return blog ? this.map(blog) : undefined; // Возвращаем отображаемую модель
         });
     },
-    //Этот метод должен возвращать все блоги.
     getAll() {
         return __awaiter(this, void 0, void 0, function* () {
-            return yield mongoDb_1.blogsCollection.find({}, { projection: { _id: 0 } }).toArray();
+            const blogs = yield mongoDb_1.blogsCollection.find({}, { projection: { _id: 0 } }).toArray();
+            return blogs.map(blog => (Object.assign(Object.assign({}, blog), { id: blog.id }))); // Обновляем все блоги с id
         });
     },
-    //Метод для удаления блога по ID.
     del(id) {
         return __awaiter(this, void 0, void 0, function* () {
             const result = yield mongoDb_1.blogsCollection.deleteOne({ id: id });
-            return result.deletedCount ? { id } : null;
+            return result.deletedCount ? { id } : null; // Возвращаем id удаленного блога
         });
     },
-    //Метод для обновления существующего блога по ID.
     put(blog, id) {
         return __awaiter(this, void 0, void 0, function* () {
-            const result = yield mongoDb_1.blogsCollection
-                .updateOne({ id: id }, { $set: blog });
-            return result.modifiedCount ? { id } : null;
+            const result = yield mongoDb_1.blogsCollection.updateOne({ id: id }, { $set: blog });
+            return result.modifiedCount ? { id } : null; // Возвращаем id обновленного блога
         });
     },
-    //Этот метод преобразует BlogDbType в BlogViewModel, индивидуально выбирая нужные поля для вывода.
     map(blog) {
         return {
-            id: blog.id, // Возвращаем _id как строку
+            id: blog.id, // Возвращаем id (так как он уже установлен)
             name: blog.name,
             description: blog.description,
             websiteUrl: blog.websiteUrl,

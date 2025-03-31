@@ -37,7 +37,7 @@ describe('/blogs', () => {
     it('should create', async () => {
 
         const newBlog = {
-            id: new Date().toISOString() + Math.random().toString(),
+           // id: new Date().toISOString() + Math.random().toString(),
             name: "new blog",
             description: "description",
             websiteUrl: "https://someurl.com",
@@ -55,20 +55,20 @@ describe('/blogs', () => {
 
 
         // Находим созданный блог в коллекции
-        const createdBlog = await blogsCollection.findOne({id: res.body.id});
+        const createdBlog = await blogsCollection.findOne({id: res.body.id},{projection: {_id: 0}});
 
         console.log(createdBlog);
         // Проверяем, что созданный блог существует
-        // expect(createdBlog).toBeTruthy(); // Убедитесь, что созданный блог не равен null
-        //
-        // if (createdBlog) { // Проверяем на наличие созданного блога
-        //
-        //     expect(createdBlog.name).toEqual(newBlog.name);
-        //     expect(createdBlog.description).toEqual(newBlog.description);
-        //     expect(createdBlog.websiteUrl).toEqual(newBlog.websiteUrl);
-        //     expect(createdBlog.createdAt).toBeDefined();
-        //    expect(createdBlog.isMembership).toEqual(false); // Сравниваем с правильным значением
-        // }
+        expect(createdBlog).toBeTruthy(); // Убедитесь, что созданный блог не равен null
+
+        if (createdBlog) { // Проверяем на наличие созданного блога
+
+            expect(createdBlog.name).toEqual(newBlog.name);
+            expect(createdBlog.description).toEqual(newBlog.description);
+            expect(createdBlog.websiteUrl).toEqual(newBlog.websiteUrl);
+            expect(createdBlog.createdAt).toBeDefined();
+           expect(createdBlog.isMembership).toEqual(false); // Сравниваем с правильным значением
+        }
     });
 
     it('shouldn\'t create 401', async () => {
@@ -159,7 +159,7 @@ describe('/blogs', () => {
         //await blogsCollection.insertMany(dataset1.blogs);
 
         const res = await req
-            .get(SETTINGS.PATH.BLOGS + '/1')
+            .get(`${SETTINGS.PATH.BLOGS}/nonexistent_id`)
             .expect(HTTP_STATUSES.NOT_FOUND_404) // проверка на ошибку
 
         console.log(res.body)
@@ -260,7 +260,7 @@ describe('/blogs', () => {
         }
 
         const res = await req
-            .put(SETTINGS.PATH.BLOGS + '/1')
+            .put(`${SETTINGS.PATH.BLOGS}/nonexistent_id`)
             .set({'Authorization': 'Basic ' + codedAuth})
             .send(blog)
             .expect(HTTP_STATUSES.NOT_FOUND_404) // проверка на ошибку

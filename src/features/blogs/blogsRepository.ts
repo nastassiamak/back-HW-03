@@ -1,74 +1,63 @@
-import {BlogInputModel, BlogViewModel} from "../../input-output-type/blog_type";
+import { BlogInputModel,BlogViewModel } from "../../input-output-type/blog_type";
+import { blogsCollection } from "../../db/mongoDb"; // Подключите к своей коллекции
+import { ObjectId, OptionalId } from "mongodb";
 import {BlogBbType} from "../../db/blog-db-type";
-import {blogsCollection} from "../../db/mongoDb";
-import {ObjectId} from "mongodb";
-
-
 
 export const blogsRepository = {
-
-    async create(blog: BlogInputModel) {
-        // Убедитесь, что коллекция инициализирована
+    async create(blog: BlogInputModel): Promise<BlogBbType> {
         if (!blogsCollection) {
             throw new Error("blogsCollection не инициализирована.");
         }
 
-        const newBlog = {
-            id: new Date().toISOString()+Math.random().toString(),
-
+        // Создаем объект нового блога без id
+        const newBlog: OptionalId<BlogBbType> = {
+            id: new Date().toISOString() + Math.random().toString(),
             name: blog.name,
             description: blog.description,
             websiteUrl: blog.websiteUrl,
-            createdAt: new Date().toISOString(),
-            isMembership:  false
-        }
+            createdAt: new Date().toISOString(), // Генерация текущего времени
+            isMembership: false // Используем значение из blog или false по умолчанию
+        };
         try {
-            // Пытаемся вставить новый блог в коллекцию
-            await blogsCollection.insertOne(newBlog);
+            const result = await blogsCollection.insertOne(newBlog);
+
+
+            return newBlog;
         } catch (error) {
-            // Логируем ошибку, если возникла проблема
             console.error('Error inserting new blog:', error);
-            // Генерируем исключение с более информативным сообщением
             throw new Error('Failed to create blog');
         }
-
-        return newBlog; // Возвращаем успешно созданный блог
-
     },
 
-    async find(id: string) {
-        return await blogsCollection.findOne({ id: id }, { projection: { _id: 0 }})
+    async find(id: string): Promise<BlogBbType | null> {
+        // Поиск по _id (используем ObjectId)
+        const blog = await blogsCollection.findOne({ id: id}, {projection: {_id: 0}});
+        return blog ? { ...blog, id: blog.id} : null; // Возвращаем объект с id
     },
 
-    async findAndMap(id: string) {
-        const blogs = await this.find(id);// использовать этот метод если проверили существование
-        return blogs ? this.map(blogs) : undefined
+    async findAndMap(id: string): Promise<BlogViewModel | undefined> {
+        const blog = await this.find(id);
+        return blog ? this.map(blog) : undefined; // Возвращаем отображаемую модель
     },
 
-    //Этот метод должен возвращать все блоги.
-    async getAll(){
-      return await blogsCollection.find({}, { projection: { _id: 0 } }).toArray();
-
+    async getAll(): Promise<BlogBbType[]> {
+        const blogs = await blogsCollection.find({}, {projection: {_id: 0}}).toArray();
+        return blogs.map(blog => ({ ...blog, id: blog.id })); // Обновляем все блоги с id
     },
 
-
-    //Метод для удаления блога по ID.
-    async del(id: string) {
-        const result = await blogsCollection.deleteOne({ id: id });
-        return result.deletedCount ? {id}: null
+    async del(id: string): Promise<{ id: string } | null> {
+        const result = await blogsCollection.deleteOne({ id: id});
+        return result.deletedCount ? { id } : null; // Возвращаем id удаленного блога
     },
 
-    //Метод для обновления существующего блога по ID.
-    async put(blog: BlogInputModel, id: string) {
-        const result = await blogsCollection
-            .updateOne({ id:id }, {$set: blog });
-        return result.modifiedCount ? {id}: null
+    async put(blog: BlogInputModel, id: string): Promise<{ id: string } | null> {
+        const result = await blogsCollection.updateOne({ id:id }, { $set: blog });
+        return result.modifiedCount ? { id } : null; // Возвращаем id обновленного блога
     },
 
-    //Этот метод преобразует BlogDbType в BlogViewModel, индивидуально выбирая нужные поля для вывода.
     map(blog: BlogBbType): BlogViewModel {
         return {
-            id: blog.id, // Возвращаем _id как строку
+            id: blog.id, // Возвращаем id (так как он уже установлен)
             name: blog.name,
             description: blog.description,
             websiteUrl: blog.websiteUrl,
@@ -76,5 +65,4 @@ export const blogsRepository = {
             isMembership: blog.isMembership,
         };
     }
-
 }
