@@ -4,30 +4,41 @@ import { ObjectId, OptionalId } from "mongodb";
 import {BlogBbType} from "../../db/blog-db-type";
 
 export const blogsRepository = {
-    async create(blog: BlogInputModel): Promise<BlogBbType> {
+    async create(blog: BlogInputModel){
         if (!blogsCollection) {
             throw new Error("blogsCollection не инициализирована.");
         }
 
-        // Создаем объект нового блога без id
-        const newBlog: OptionalId<BlogBbType> = {
-            id: new Date().toISOString() + Math.random().toString(),
+        // Генерация объекта нового блога с id
+        const newBlog ={
+            id: new ObjectId().toString(),
             name: blog.name,
             description: blog.description,
             websiteUrl: blog.websiteUrl,
-            createdAt: new Date().toISOString(), // Генерация текущего времени
+            createdAt: new Date().toISOString(), // Генерация текущего времени в формате ISO
             isMembership: false // Используем значение из blog или false по умолчанию
-        };
-        try {
-            const result = await blogsCollection.insertOne(newBlog);
+    };
 
+    try {
+        // Вставляем новый блог в коллекцию
+        const result = await blogsCollection.insertOne(newBlog);
 
-            return newBlog;
-        } catch (error) {
-            console.error('Error inserting new blog:', error);
-            throw new Error('Failed to create blog');
-        }
-    },
+        // Создаем объект блога, включая только _id от MongoDB
+        const createdBlog: BlogBbType = {
+    id: result.insertedId.toString(), // Получаем _id от MongoDB и переводим в строку
+    name: newBlog.name,
+    description: newBlog.description,
+    websiteUrl: newBlog.websiteUrl,
+    createdAt: newBlog.createdAt,
+    isMembership: newBlog.isMembership
+};
+
+return createdBlog; // Возвращаем созданный блог
+} catch (error) {
+    console.error('Error inserting new blog:', error);
+    throw new Error('Failed to create blog');
+}
+},
 
     async find(id: string): Promise<BlogBbType | null> {
         // Поиск по _id (используем ObjectId)

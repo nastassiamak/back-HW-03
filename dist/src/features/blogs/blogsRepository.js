@@ -11,24 +11,35 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.blogsRepository = void 0;
 const mongoDb_1 = require("../../db/mongoDb"); // Подключите к своей коллекции
+const mongodb_1 = require("mongodb");
 exports.blogsRepository = {
     create(blog) {
         return __awaiter(this, void 0, void 0, function* () {
             if (!mongoDb_1.blogsCollection) {
                 throw new Error("blogsCollection не инициализирована.");
             }
-            // Создаем объект нового блога без id
+            // Генерация объекта нового блога с id
             const newBlog = {
-                id: new Date().toISOString() + Math.random().toString(),
+                id: new mongodb_1.ObjectId().toString(),
                 name: blog.name,
                 description: blog.description,
                 websiteUrl: blog.websiteUrl,
-                createdAt: new Date().toISOString(), // Генерация текущего времени
+                createdAt: new Date().toISOString(), // Генерация текущего времени в формате ISO
                 isMembership: false // Используем значение из blog или false по умолчанию
             };
             try {
+                // Вставляем новый блог в коллекцию
                 const result = yield mongoDb_1.blogsCollection.insertOne(newBlog);
-                return newBlog;
+                // Создаем объект блога, включая только _id от MongoDB
+                const createdBlog = {
+                    id: result.insertedId.toString(), // Получаем _id от MongoDB и переводим в строку
+                    name: newBlog.name,
+                    description: newBlog.description,
+                    websiteUrl: newBlog.websiteUrl,
+                    createdAt: newBlog.createdAt,
+                    isMembership: newBlog.isMembership
+                };
+                return createdBlog; // Возвращаем созданный блог
             }
             catch (error) {
                 console.error('Error inserting new blog:', error);
