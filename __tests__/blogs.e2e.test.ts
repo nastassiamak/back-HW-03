@@ -5,7 +5,7 @@ import {codedAuth, createString, dataset1} from "./helpers/dataset";
 import {req} from "./helpers/test-helpers";
 import {MongoMemoryServer} from "mongodb-memory-server";
 import {blogsCollection, disconnectDb, runDb} from "../src/db/mongoDb";
-import {MongoClient} from "mongodb";
+import {MongoClient, ObjectId} from "mongodb";
 
 describe('/blogs', () => {
     let mongoServer: MongoMemoryServer;
@@ -37,7 +37,7 @@ describe('/blogs', () => {
     it('should create', async () => {
 
         const newBlog = {
-           id: new Date().toISOString() + Math.random().toString(),
+           //id: new Date().toISOString() + Math.random().toString(),
             name: "new blog",
             description: "description",
             websiteUrl: "https://someurl.com",
@@ -55,11 +55,11 @@ describe('/blogs', () => {
 
 
         // Находим созданный блог в коллекции
-        const createdBlog = await blogsCollection.findOne({id: res.body.id},{projection: {_id: 0}});
+        const createdBlog = await blogsCollection.findOne( {_id: new ObjectId(res.body._id)});
 
         console.log(createdBlog);
         // Проверяем, что созданный блог существует
-        expect(createdBlog).toBeTruthy(); // Убедитесь, что созданный блог не равен null
+        expect(createdBlog).not.toBeNull(); // Убедитесь, что созданный блог не равен null
 
         if (createdBlog) { // Проверяем на наличие созданного блога
 

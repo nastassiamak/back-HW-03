@@ -11,7 +11,6 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.blogsRepository = void 0;
 const mongoDb_1 = require("../../db/mongoDb"); // Подключите к своей коллекции
-const mongodb_1 = require("mongodb");
 exports.blogsRepository = {
     create(blog) {
         return __awaiter(this, void 0, void 0, function* () {
@@ -20,7 +19,7 @@ exports.blogsRepository = {
             }
             // Генерация объекта нового блога с id
             const newBlog = {
-                id: new mongodb_1.ObjectId().toString(),
+                id: new Date().toISOString() + Math.random().toString(),
                 name: blog.name,
                 description: blog.description,
                 websiteUrl: blog.websiteUrl,
@@ -32,7 +31,8 @@ exports.blogsRepository = {
                 const result = yield mongoDb_1.blogsCollection.insertOne(newBlog);
                 // Создаем объект блога, включая только _id от MongoDB
                 const createdBlog = {
-                    id: result.insertedId.toString(), // Получаем _id от MongoDB и переводим в строку
+                    id: newBlog.id,
+                    _id: result.insertedId, // Получаем _id от MongoDB и переводим в строку
                     name: newBlog.name,
                     description: newBlog.description,
                     websiteUrl: newBlog.websiteUrl,
@@ -80,7 +80,8 @@ exports.blogsRepository = {
     },
     map(blog) {
         return {
-            id: blog.id, // Возвращаем id (так как он уже установлен)
+            id: blog.id,
+            _id: blog._id, // Возвращаем id (так как он уже установлен)
             name: blog.name,
             description: blog.description,
             websiteUrl: blog.websiteUrl,
