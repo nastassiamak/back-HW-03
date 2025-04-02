@@ -12,19 +12,20 @@ Object.defineProperty(exports, "__esModule", { value: true });
 exports.postsRepository = void 0;
 const blogsRepository_1 = require("../blogs/blogsRepository");
 const mongoDb_1 = require("../../db/mongoDb");
+const mongodb_1 = require("mongodb");
 exports.postsRepository = {
     create(post) {
         return __awaiter(this, void 0, void 0, function* () {
             const blog = yield blogsRepository_1.blogsRepository.find(post.blogId.toString());
             const blogName = blog ? blog.name : "Неизвестный блог"; // Поверяем и устанавливаем значение по умолчанию
             const newPost = {
-                id: new Date().toString() + Math.random(),
+                id: new mongodb_1.ObjectId().toString(),
                 title: post.title,
                 content: post.content,
                 shortDescription: post.shortDescription,
                 blogId: post.blogId,
                 blogName: blogName,
-                createdAt: new Date().toString(),
+                createdAt: new Date().toISOString(),
             };
             const res = yield mongoDb_1.postsCollection.insertOne(newPost);
             return newPost;

@@ -39,7 +39,7 @@ exports.blog6 = {
     isMembership: false
 }; // dataset нельзя изменять
 exports.post1 = {
-    id: new Date().toISOString() + Math.random(),
+    id: new mongodb_1.ObjectId().toString(),
     title: 't1',
     shortDescription: 's1',
     content: 'c1',
@@ -48,7 +48,7 @@ exports.post1 = {
     createdAt: new Date().toISOString()
 };
 exports.post2 = {
-    id: new Date().toISOString() + Math.random(),
+    id: new mongodb_1.ObjectId().toString(),
     title: 't2',
     shortDescription: 's2',
     content: 'c2',
