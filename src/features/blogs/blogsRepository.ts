@@ -43,7 +43,7 @@ return createdBlog; // Возвращаем созданный блог
 
     async find(id: string): Promise<BlogBbType | null> {
         // Поиск по _id (используем ObjectId)
-        const blog = await blogsCollection.findOne({id});
+        const blog = await blogsCollection.findOne({id: id}, {projection: {_id: 0}});
         return blog ? { ...blog, id: blog.id} : null; // Возвращаем объект с id
     },
 

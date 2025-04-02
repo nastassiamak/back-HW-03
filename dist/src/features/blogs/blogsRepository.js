@@ -50,7 +50,7 @@ exports.blogsRepository = {
     find(id) {
         return __awaiter(this, void 0, void 0, function* () {
             // Поиск по _id (используем ObjectId)
-            const blog = yield mongoDb_1.blogsCollection.findOne({ id });
+            const blog = yield mongoDb_1.blogsCollection.findOne({ id: id }, { projection: { _id: 0 } });
             return blog ? Object.assign(Object.assign({}, blog), { id: blog.id }) : null; // Возвращаем объект с id
         });
     },

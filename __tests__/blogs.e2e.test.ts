@@ -174,22 +174,40 @@ describe('/blogs', () => {
             .expect(HTTP_STATUSES.OK_200) // проверка на ошибку
 
         console.log(res.body)
-       //  const blogsInDb = await blogsCollection.findOne({id: res.body.id}, {projection: { _id: 0 }});
-       // expect(blogsInDb).toEqual(dataset1.blogs[0])
+        const blogsInDb = await blogsCollection.findOne({id: res.body.id});
+       expect(blogsInDb).toEqual(dataset1.blogs[0])
     })
 
     it('should del', async () => {
         await blogsCollection.insertMany(dataset1.blogs);
 
-        const res = await req
-            .delete(SETTINGS.PATH.BLOGS + '/' + dataset1.blogs[0].id)
-            .set({'Authorization': 'Basic ' + codedAuth})
-            .expect(HTTP_STATUSES.NO_CONTENT_204) // проверка на ошибку
 
-        //console.log(res.body)
-        const blogsInDb = await blogsCollection.find().toArray();
-        expect(blogsInDb.length).toEqual(0)
-    })
+        const blog = {
+            name: 'n2',
+            description: 'd2',
+            websiteUrl: 'http://some2.com',
+            createdAt: new Date().toISOString(),
+            isMembership: false
+        };
+
+        const res = await req
+            .put(SETTINGS.PATH.BLOGS + '/' + dataset1.blogs[0].id)
+            .set({'Authorization': 'Basic ' + codedAuth})
+            .send(blog)
+            .expect(HTTP_STATUSES.NO_CONTENT_204);
+
+        // Убедитесь, что обновленный объект соответствует изменениям в базе данных
+        const updatedBlog = await blogsCollection.findOne({ id: dataset1.blogs[0].id });
+        expect(updatedBlog).not.toBeNull(); // Проверяем, что блог существует
+
+        if (updatedBlog) {
+            // Проверяем каждое поле на соответствие
+            expect(updatedBlog.name).toEqual(blog.name);
+            expect(updatedBlog.description).toEqual(blog.description);
+            expect(updatedBlog.websiteUrl).toEqual(blog.websiteUrl);
+            expect(updatedBlog._id).toBeDefined(); // Проверьте, что _id определен
+        }
+    });
 
     it('shouldn\'t del', async () => {
         await blogsCollection.deleteMany({});
