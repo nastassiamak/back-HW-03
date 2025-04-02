@@ -15,7 +15,7 @@ const createString = (length) => {
 };
 exports.createString = createString;
 exports.blog1 = {
-    id: new Date().toString(),
+    id: new mongodb_1.ObjectId().toString(),
     name: 'n11',
     description: 'd11',
     websiteUrl: 'http://example11.com',

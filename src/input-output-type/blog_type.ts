@@ -3,7 +3,7 @@ import {ObjectId} from "mongodb";
 export type BlogViewModel = {
 
     id: string;
-    _id?: ObjectId;
+
     name: string;
     description: string;
     websiteUrl: string;

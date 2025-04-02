@@ -22,7 +22,7 @@ export const createString = (length: number) => {
 
 
 export const blog1: BlogBbType = {
-    id: new Date().toString(),
+    id: new ObjectId().toString(),
 
     name: 'n11',
     description: 'd11',

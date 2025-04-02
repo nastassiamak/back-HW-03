@@ -11,8 +11,7 @@ export const blogsRepository = {
 
         // Генерация объекта нового блога с id
         const newBlog ={
-            id: new Date().toISOString() + Math.random().toString(),
-
+            id: new ObjectId().toString(),
             name: blog.name,
             description: blog.description,
             websiteUrl: blog.websiteUrl,
@@ -27,7 +26,7 @@ export const blogsRepository = {
         // Создаем объект блога, включая только _id от MongoDB
         const createdBlog: BlogBbType = {
     id: newBlog.id,
-    _id: result.insertedId, // Получаем _id от MongoDB и переводим в строку
+
     name: newBlog.name,
     description: newBlog.description,
     websiteUrl: newBlog.websiteUrl,
@@ -44,7 +43,7 @@ return createdBlog; // Возвращаем созданный блог
 
     async find(id: string): Promise<BlogBbType | null> {
         // Поиск по _id (используем ObjectId)
-        const blog = await blogsCollection.findOne({ id: id}, {projection: {_id: 0}});
+        const blog = await blogsCollection.findOne({id});
         return blog ? { ...blog, id: blog.id} : null; // Возвращаем объект с id
     },
 
@@ -71,7 +70,7 @@ return createdBlog; // Возвращаем созданный блог
     map(blog: BlogBbType): BlogViewModel {
         return {
             id: blog.id,
-            _id: blog._id, // Возвращаем id (так как он уже установлен)
+
             name: blog.name,
             description: blog.description,
             websiteUrl: blog.websiteUrl,
