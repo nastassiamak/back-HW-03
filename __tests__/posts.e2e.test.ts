@@ -53,9 +53,10 @@ describe('/posts', () => {
         expect(res.body.blogName).toEqual(dataset1.blogs[0].name);
         expect(typeof res.body.id).toEqual('string');
 
-        const postsInDb = await postsCollection.find({}).toArray();
+        const postsInDb = await postsCollection.find({}, {projection: {_id: 0}}).toArray();
         expect(postsInDb.length).toEqual(1); // Проверка, что пост действительно создан
         expect(postsInDb[0]).toEqual(expect.objectContaining(res.body)); // Проверка, что полученный пост соответствует тому, что в базе
+        console.log(postsInDb)
     })
 
     it('shouldn\'t create 401', async () => {
@@ -116,7 +117,7 @@ describe('/posts', () => {
 
         console.log(res.body)
 
-        const postsInDb = await postsCollection.find({}).toArray();
+        const postsInDb = await postsCollection.find({}, {projection: {_id: 0}}).toArray();
         expect(postsInDb.length).toEqual(0);
 
 
@@ -167,6 +168,7 @@ describe('/posts', () => {
         //setDB(dataset2)
         //await blogsCollection.insertMany(dataset2.blogs)
         await postsCollection.insertMany(dataset2.posts);
+
 
         const res = await req
             .delete(SETTINGS.PATH.POSTS + '/' + dataset2.posts[0].id)

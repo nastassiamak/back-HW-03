@@ -52,7 +52,7 @@ export const blog6: BlogBbType = {
 } as const // dataset нельзя изменять
 
 export const post1: PostDBType ={
-   id: new Date().toISOString() + Math.random(),
+   id: new ObjectId().toString(),
     title: 't1',
     shortDescription: 's1',
     content: 'c1',
@@ -62,7 +62,7 @@ export const post1: PostDBType ={
 
 }
 export const post2: PostDBType ={
-    id: new Date().toISOString() + Math.random(),
+    id: new ObjectId().toString(),
     title: 't2',
     shortDescription: 's2',
     content: 'c2',

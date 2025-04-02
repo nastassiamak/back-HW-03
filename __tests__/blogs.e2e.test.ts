@@ -235,7 +235,7 @@ describe('/blogs', () => {
         expect(blogsInDb.length).toEqual(0); // Утверждаем, что длина равна 0
     })
 
-    it('should update blog by id', async () => {
+    it( 'should update blog by id', async () => {
         await blogsCollection.insertMany(dataset1.blogs); // Вставляем начальные данные
 
         const updatedBlog = {

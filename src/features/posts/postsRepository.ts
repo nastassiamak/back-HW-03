@@ -12,13 +12,13 @@ export const postsRepository = {
         const blog = await blogsRepository.find(post.blogId.toString());
         const blogName = blog ? blog.name : "Неизвестный блог"; // Поверяем и устанавливаем значение по умолчанию
         const newPost: PostDBType  = {
-            id: new Date().toString() + Math.random(),
+            id: new ObjectId().toString(),
             title: post.title,
             content: post.content,
             shortDescription: post.shortDescription,
             blogId: post.blogId,
             blogName: blogName,
-            createdAt:new Date().toString(),
+            createdAt:new Date().toISOString(),
         }
         const res = await postsCollection.insertOne(newPost);
         return newPost
