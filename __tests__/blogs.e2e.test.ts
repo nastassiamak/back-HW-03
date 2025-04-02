@@ -235,37 +235,36 @@ describe('/blogs', () => {
         expect(blogsInDb.length).toEqual(0); // Утверждаем, что длина равна 0
     })
 
-    it('should update', async () => {
-        await blogsCollection.insertMany(dataset1.blogs);
+    it('should update blog by id', async () => {
+        await blogsCollection.insertMany(dataset1.blogs); // Вставляем начальные данные
 
-        const blog = {
-            name: 'n2',
-            description: 'd2',
-            websiteUrl: 'http://some2.com',
-            createdAt: new Date().toISOString(),
-            isMembership: false
+        const updatedBlog = {
+            name: 'new name', // Задаем новые значения
+            description: 'description',
+            websiteUrl: 'http://example.com',
+            isMembership: false // Убедитесь, что это соответствует вашей модели
+        };
 
-        }
-
+        // Отправляем запрос на обновление блога
         const res = await req
             .put(SETTINGS.PATH.BLOGS + '/' + dataset1.blogs[0].id)
             .set({'Authorization': 'Basic ' + codedAuth})
-            .send(blog)
-            .expect(HTTP_STATUSES.NO_CONTENT_204) // проверка на ошибку
+            .send(updatedBlog)
+            .expect(HTTP_STATUSES.NO_CONTENT_204); // Ожидаем статус 204
 
-        console.log(res.body)
-        // Убедитесь, что обновленный объект соответствует изменениям в базе данных
-        const updatedBlog = await blogsCollection.findOne({ id: dataset1.blogs[0].id }); // Получаем обновленный блог из БД
-        expect(updatedBlog).not.toBeNull(); // Проверяем, что блог существует
+        const blogFromDb = await blogsCollection.findOne({ id: dataset1.blogs[0].id }); // Получаем обновленный объект из базы данных
 
-        if (updatedBlog) {
-            // Проверяем каждое поле на соответствие
-            expect(updatedBlog.name).toEqual(blog.name);
-            expect(updatedBlog.description).toEqual(blog.description);
-            expect(updatedBlog.websiteUrl).toEqual(blog.websiteUrl);
-
-        }
-    })
+        // Убедитесь, что _id присутствует, а остальные поля обновлены
+        expect(blogFromDb).not.toBeNull(); // Убедитесь, что блог существует
+        expect(blogFromDb).toEqual({
+            _id: expect.any(ObjectId), // Убедитесь, что _id - это строка
+            id: dataset1.blogs[0].id,
+            name: 'new name', // Ожидаемое новое значение
+            description: 'description', // Ожидаемое новое значение
+            websiteUrl: 'http://example.com', // Ожидаемое новое значение
+            isMembership: false, // Убедитесь, что это значение также обновлено
+        });
+    });
 
     it('shouldn\'t update 404', async () => {
         await blogsCollection.deleteMany({});
