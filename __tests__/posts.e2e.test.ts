@@ -4,7 +4,7 @@ import {PostInputModel} from "../src/input-output-type/post_type";
 import {req} from "./helpers/test-helpers";
 import {SETTINGS} from "../src/setting";
 import {blogsCollection, disconnectDb, postsCollection, runDb} from "../src/db/mongoDb";
-import {MongoClient} from "mongodb";
+import {MongoClient, ObjectId} from "mongodb";
 import {MongoMemoryServer} from "mongodb-memory-server";
 
 
@@ -54,7 +54,7 @@ describe('/posts', () => {
             blogName: expect.any(String), // Предполагается, что блог возвращается
             content: expect.any(String),
             createdAt: expect.any(String), // Игнорируем формат
-            id: expect.any(String),
+            id: expect.any(ObjectId),
             shortDescription: expect.any(String),
             title: expect.any(String),
         });
