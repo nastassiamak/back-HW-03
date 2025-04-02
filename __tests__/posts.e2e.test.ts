@@ -163,6 +163,7 @@ describe('/posts', () => {
         const postsInDb = await postsCollection.findOne({id: res.body.id});
         expect(postsInDb).toEqual(dataset2.posts[0]);
 
+
     })
 
     it('should delete', async () => {
@@ -220,19 +221,26 @@ describe('/posts', () => {
         console.log(res.body)
         // Убедитесь, что обновленный объект соответствует изменениям в базе данных
         const updatedPost = await postsCollection.findOne({ id: dataset2.posts[0].id}); // Получаем обновленный блог из БД
+        expect(updatedPost).not.toBeNull(); // Убедитесь, что блог существует
+        expect(updatedPost).toEqual({
+            _id: expect.any(ObjectId), // Убедитесь, что _id - это строка
+            title: 't2',
+            shortDescription: 's2',
+            content: 'c2',
+            blogId: dataset2.blogs[0].id,
+        });
 
-
-        if (updatedPost) {
-            // Проверяем каждое поле на соответствие
-            expect(updatedPost.title).toEqual(post.title);
-            expect(updatedPost.shortDescription).toEqual(post.shortDescription);
-            expect(updatedPost.content).toEqual(post.content);
-            expect(updatedPost.blogId).toEqual(post.blogId);
-
-            // expect(updatedPost.name).toEqual(blog.name);
-            // expect(updatedPost.description).toEqual(blog.description);
-            // expect(updatedPost.websiteUrl).toEqual(blog.websiteUrl);
-       }
+       //  if (updatedPost) {
+       //      // Проверяем каждое поле на соответствие
+       //      expect(updatedPost.title).toEqual(post.title);
+       //      expect(updatedPost.shortDescription).toEqual(post.shortDescription);
+       //      expect(updatedPost.content).toEqual(post.content);
+       //      expect(updatedPost.blogId).toEqual(post.blogId);
+       //
+       //      // expect(updatedPost.name).toEqual(blog.name);
+       //      // expect(updatedPost.description).toEqual(blog.description);
+       //      // expect(updatedPost.websiteUrl).toEqual(blog.websiteUrl);
+       // }
     })
 
     it('shouldn\'t update 404', async () => {
