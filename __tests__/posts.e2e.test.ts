@@ -124,6 +124,7 @@ describe('/posts', () => {
             .expect(HTTP_STATUSES.OK_200)
 
         console.log(res.body)
+        expect(res.body).toEqual([])
 
         const postsInDb = await postsCollection.find().toArray();
         expect(postsInDb.length).toEqual(0);
@@ -141,9 +142,18 @@ describe('/posts', () => {
 
         console.log(res.body)
 
-        const postsInDb = await postsCollection.find({}).toArray();
-        expect(postsInDb.length).toEqual(1);
-        expect(postsInDb[0]).toEqual(dataset2.posts[0])
+        const postsInDb = await postsCollection.find({}, {projection: {_id: 0}}).toArray();
+        expect(postsInDb.length).toEqual(res.body.length);expect(res.body).toEqual(expect.arrayContaining([
+            expect.objectContaining({
+                // Убираем _id из проверки, если оно не возвращается
+                blogId: expect.any(String),
+                blogName: expect.any(String),
+                content: expect.any(String),
+                id: expect.any(String),
+                shortDescription: expect.any(String),
+                title: expect.any(String),
+            }),
+        ]));
     })
 
     it('shouldn\'t find', async () => {

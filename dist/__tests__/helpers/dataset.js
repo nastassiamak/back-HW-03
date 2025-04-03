@@ -14,7 +14,7 @@ const createString = (length) => {
 };
 exports.createString = createString;
 exports.blog1 = {
-    id: new Date().toString() + Math.random().toString(),
+    id: new Date().toISOString() + Math.random().toString(),
     name: 'n11',
     description: 'd11',
     websiteUrl: 'http://example11.com',
@@ -22,7 +22,7 @@ exports.blog1 = {
     isMembership: false
 }; // dataset нельзя изменять
 exports.blog5 = {
-    id: new Date().toString() + Math.random().toString(),
+    id: new Date().toISOString() + Math.random().toString(),
     name: 'name5',
     description: 'description5',
     websiteUrl: 'http://example5.com',
@@ -30,7 +30,7 @@ exports.blog5 = {
     isMembership: false
 }; // dataset нельзя изменять
 exports.blog6 = {
-    id: new Date().toString() + Math.random().toString(),
+    id: new Date().toISOString() + Math.random().toString(),
     name: 'name6',
     description: 'description6',
     websiteUrl: 'http://example6.com',
@@ -38,7 +38,7 @@ exports.blog6 = {
     isMembership: false
 }; // dataset нельзя изменять
 exports.post1 = {
-    id: new Date().toString() + Math.random().toString(),
+    id: new Date().toISOString() + Math.random().toString(),
     title: 't1',
     shortDescription: 's1',
     content: 'c1',
@@ -47,7 +47,7 @@ exports.post1 = {
     createdAt: new Date().toISOString()
 };
 exports.post2 = {
-    id: new Date().toString() + Math.random().toString(),
+    id: new Date().toISOString() + Math.random().toString(),
     title: 't2',
     shortDescription: 's2',
     content: 'c2',
