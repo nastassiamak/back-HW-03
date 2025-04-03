@@ -57,7 +57,7 @@ export const post1: PostDBType ={
     shortDescription: 's1',
     content: 'c1',
     blogId: blog1.id,
-    blogName: 'n1',
+    blogName: blog5.name,
     createdAt: new Date().toISOString()
 
 }
@@ -67,7 +67,7 @@ export const post2: PostDBType ={
     shortDescription: 's2',
     content: 'c2',
     blogId: blog5.id,
-    blogName: 'name5',
+    blogName: blog5.name,
     createdAt: new Date().toISOString()
 
 }

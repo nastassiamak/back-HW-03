@@ -8,10 +8,10 @@ import {BlogInputModel} from "../../input-output-type/blog_type";
 import {BlogBbType} from "../../db/blog-db-type";
 
 export const postsRepository = {
-    async create(post: PostInputModel):Promise<PostDBType> {
-        const blog = await blogsRepository.find(post.blogId.toString());
+    async create(post: PostInputModel) {
+        const blog = await blogsRepository.find(post.blogId);
         const blogName = blog ? blog.name : "Неизвестный блог"; // Поверяем и устанавливаем значение по умолчанию
-        const newPost: PostDBType  = {
+        const newPost  = {
             id: new ObjectId().toString(),
             title: post.title,
             content: post.content,
@@ -20,11 +20,28 @@ export const postsRepository = {
             blogName: blogName,
             createdAt:new Date().toISOString(),
         }
+        try {
+
+
         const res = await postsCollection.insertOne(newPost);
-        return newPost
-        // db.posts = [...db.posts, newPost]
-        // return newPost.id
+
+        const createdPost: PostDBType = {
+            id: newPost.id,
+            title: newPost.title,
+            content: newPost.content,
+            shortDescription: newPost.shortDescription,
+            blogId: newPost.blogId,
+            blogName: newPost.blogName,
+            createdAt: newPost.createdAt,
+        }
+            return createdPost; // Возвращаем созданный блог
+        } catch (error) {
+            console.error('Error inserting new blog:', error);
+            throw new Error('Failed to create blog');
+        }
+
     },
+
 
     async find(id: string) {
         return await postsCollection.findOne({id})

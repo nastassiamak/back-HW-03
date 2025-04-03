@@ -44,7 +44,7 @@ exports.post1 = {
     shortDescription: 's1',
     content: 'c1',
     blogId: exports.blog1.id,
-    blogName: 'n1',
+    blogName: exports.blog5.name,
     createdAt: new Date().toISOString()
 };
 exports.post2 = {
@@ -53,7 +53,7 @@ exports.post2 = {
     shortDescription: 's2',
     content: 'c2',
     blogId: exports.blog5.id,
-    blogName: 'name5',
+    blogName: exports.blog5.name,
     createdAt: new Date().toISOString()
 };
 exports.dataset1 = {

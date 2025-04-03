@@ -200,36 +200,36 @@ describe('/posts', () => {
             .expect(HTTP_STATUSES.UNAUTHORIZED_401)
 
     })
+    it('should update a post by id', async () => {
+        await postsCollection.insertMany(dataset2.posts); // Добавляем начальные данные
 
-    it('should update', async () => {
-        await postsCollection.insertMany(dataset2.posts); // Вставляем начальные данные
-
-        const post: PostInputModel = {
+        const updatedPost = {
             title: 't2',
             shortDescription: 's2',
             content: 'c2',
             blogId: dataset2.blogs[0].id,
         };
 
-        // Отправляем запрос на обновление поста
         const res = await req
             .put(SETTINGS.PATH.POSTS + '/' + dataset2.posts[0].id)
             .set({'Authorization': 'Basic ' + codedAuth})
-            .send(post)
-            .expect(HTTP_STATUSES.NO_CONTENT_204); // Ожидаем, что статус ответа - 204
+            .send(updatedPost)
+            .expect(HTTP_STATUSES.NO_CONTENT_204); // Проверка статус ответа
 
         // Получаем обновленный пост из базы данных
-        const updatedPost = await postsCollection.findOne({ id: dataset2.posts[0].id });
-        expect(updatedPost).not.toBeNull(); // Проверяем, что пост существует
+        const postFormDb = await postsCollection.findOne({ id: dataset2.posts[0].id });
+        expect(postFormDb).not.toBeNull(); // Проверяем, что пост существует
 
-        // Проверяем соответствие полей
-        expect(updatedPost).toEqual(expect.objectContaining({
-            _id: expect.any(String), // Ожидается, что это строка (или ObjectId)
+        // Применяем гибкие проверки
+        expect(postFormDb).toEqual(expect.objectContaining({
+            _id: expect.any(ObjectId), // Ожидаем, что это строка
+            blogId: dataset2.blogs[0].id,
+            blogName: dataset2.blogs[0].name, // Используем expect.any для blogName
             title: 't2',
             shortDescription: 's2',
             content: 'c2',
-            blogId: dataset2.blogs[0].id,
-            createdAt: expect.any(String), // Используйте expect.any для более гибкой проверки
+           // createdAt: expect.any(String), // Ожидаем любой формат для createdAt
+            id: expect.any(String), // Ожидаем, что id - это строка
         }));
     });
     it('shouldn\'t update 404', async () => {

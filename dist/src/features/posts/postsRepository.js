@@ -16,7 +16,7 @@ const mongodb_1 = require("mongodb");
 exports.postsRepository = {
     create(post) {
         return __awaiter(this, void 0, void 0, function* () {
-            const blog = yield blogsRepository_1.blogsRepository.find(post.blogId.toString());
+            const blog = yield blogsRepository_1.blogsRepository.find(post.blogId);
             const blogName = blog ? blog.name : "Неизвестный блог"; // Поверяем и устанавливаем значение по умолчанию
             const newPost = {
                 id: new mongodb_1.ObjectId().toString(),
@@ -27,10 +27,23 @@ exports.postsRepository = {
                 blogName: blogName,
                 createdAt: new Date().toISOString(),
             };
-            const res = yield mongoDb_1.postsCollection.insertOne(newPost);
-            return newPost;
-            // db.posts = [...db.posts, newPost]
-            // return newPost.id
+            try {
+                const res = yield mongoDb_1.postsCollection.insertOne(newPost);
+                const createdPost = {
+                    id: newPost.id,
+                    title: newPost.title,
+                    content: newPost.content,
+                    shortDescription: newPost.shortDescription,
+                    blogId: newPost.blogId,
+                    blogName: newPost.blogName,
+                    createdAt: newPost.createdAt,
+                };
+                return createdPost; // Возвращаем созданный блог
+            }
+            catch (error) {
+                console.error('Error inserting new blog:', error);
+                throw new Error('Failed to create blog');
+            }
         });
     },
     find(id) {
