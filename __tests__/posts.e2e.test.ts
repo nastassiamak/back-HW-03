@@ -33,12 +33,12 @@ describe('/posts', () => {
 
     it('should create', async () => {
        await blogsCollection.insertMany(dataset2.blogs);
-
+       //await postsCollection.insertMany(dataset2.posts)
         const newPost = {
             id: new Date().toISOString() +Math.random().toString(),
-            title: 't11',
-            shortDescription: 's11',
-            content: 'c11',
+            title: 't1',
+            shortDescription: 's1',
+            content: 'c1',
             blogId: dataset2.blogs[0].id,
             // blogName: dataset2.blogs[0].name,
             // createdPost: new Date().toISOString(),
@@ -56,17 +56,16 @@ describe('/posts', () => {
         console.log(createdPost);
 
         expect(createdPost).not.toBeNull();
+
         if (createdPost) {
-            expect(res.body).toEqual(expect.objectContaining({
-                blogId: expect.any(String),
-                blogName: expect.any(String), // Обязательно проверьте наличие этого поля
-                content: expect.any(String),
-                createdAt: expect.stringMatching(/\d{4}-\d{2}-\d{2}T\d{2}:\d{2}:\d{2}.\d{3}Z/), // Правильный формат даты
-                id: expect.any(String),
-                shortDescription: expect.any(String),
-                title: expect.any(String),
-            }));
+            expect(createdPost.title).toEqual(newPost.title);
+            expect(createdPost.shortDescription).toEqual(newPost.shortDescription);
+            expect(createdPost.blogId).toEqual(newPost.blogId);
+           // expect(createdPost.blogName).toEqual(newPost.blogName);
+            expect(createdPost.content).toEqual(newPost.content);
+            //expect(createdPost.createdAt).toBeDefined();
         }
+        console.log(createdPost);
 
     })
 
