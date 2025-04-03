@@ -9,37 +9,38 @@ import {BlogBbType} from "../../db/blog-db-type";
 
 export const postsRepository = {
     async create(post: PostInputModel) {
+        // Сначала находим блог, чтобы получить его название
         const blog = await blogsRepository.find(post.blogId);
-        const blogName = blog ? blog.name : "Неизвестный блог"; // Поверяем и устанавливаем значение по умолчанию
-        const newPost  = {
-            id: new Date().toISOString() + Math.random().toString(),
+        const blogName = blog ? blog.name : "Неизвестный блог"; // Устанавливаем имя блога
+
+        // Создаем новый пост с необходимыми полями
+        const newPost = {
+            id: new Date().toISOString() + Math.random().toString(), // Генерация уникального идентификатора
             title: post.title,
             content: post.content,
             shortDescription: post.shortDescription,
             blogId: post.blogId,
-            blogName: blogName,
-            createdAt:new Date().toISOString(),
-        }
+            blogName: blogName, // Здесь сохраняем название блога
+            createdAt: new Date().toISOString(), // Сохраняем текущую дату в правильном формате
+        };
+
+        // Пытаемся вставить новый пост в коллекцию
         try {
-
-
-        const res = await postsCollection.insertOne(newPost);
-
-        const createdPost: PostDBType = {
-            id: newPost.id,
-            title: newPost.title,
-            content: newPost.content,
-            shortDescription: newPost.shortDescription,
-            blogId: newPost.blogId,
-            blogName: newPost.blogName,
-            createdAt: newPost.createdAt,
-        }
-            return createdPost; // Возвращаем созданный блог
+            const res = await postsCollection.insertOne(newPost); // Вставка в коллекцию
+            const createdPost: PostDBType = {
+                id: newPost.id,
+                title: newPost.title,
+                content: newPost.content,
+                shortDescription: newPost.shortDescription,
+                blogId: newPost.blogId,
+                blogName: newPost.blogName,
+                createdAt: newPost.createdAt, // Сохраняем дату создания
+            };
+            return createdPost; // Возвращаем созданный пост
         } catch (error) {
-            console.error('Error inserting new blog:', error);
-            throw new Error('Failed to create blog');
+            console.error('Error inserting new post:', error);
+            throw new Error('Failed to create post'); // Обработка ошибок
         }
-
     },
 
 

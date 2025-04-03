@@ -61,6 +61,7 @@ describe('/posts', () => {
             expect(createdPost.title).toEqual(newPost.title);
             expect(createdPost.shortDescription).toEqual(newPost.shortDescription);
             expect(createdPost.blogId).toEqual(newPost.blogId);
+            expect(createdPost.blogName).toEqual(newPost.blogName);
             expect(createdPost.content).toEqual(newPost.content);
             expect(createdPost.createdAt).toBeDefined();
         }
@@ -134,6 +135,7 @@ describe('/posts', () => {
     })
 
     it('should get not empty array', async () => {
+        await postsCollection.deleteMany({});
         await postsCollection.insertMany(dataset2.posts)
 
         const res = await req
@@ -171,6 +173,7 @@ describe('/posts', () => {
 
     it('should find', async () => {
        // await blogsCollection.insertMany(dataset2.blogs)
+        await postsCollection.deleteMany({})
         await postsCollection.insertMany(dataset2.posts);
 
         const res = await req
@@ -180,6 +183,7 @@ describe('/posts', () => {
         console.log(res.body)
         const postsInDb = await postsCollection.findOne({id: res.body.id});
         expect(postsInDb).toEqual(dataset2.posts[0]);
+
 
 
     })
