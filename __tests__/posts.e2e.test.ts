@@ -122,7 +122,7 @@ describe('/posts', () => {
 
         console.log(res.body)
 
-        const postsInDb = await postsCollection.find({}, {projection: {_id: 0}}).toArray();
+        const postsInDb = await postsCollection.find( {projection: {_id: 0}}).toArray();
         expect(postsInDb.length).toEqual(0);
 
 
