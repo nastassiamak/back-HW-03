@@ -67,7 +67,7 @@ export const postsRepository = {
     },
 
     async put(post: PostInputModel, id: string) {
-        const blog = await blogsRepository.find(post.blogId.toString());
+        const blog = await blogsRepository.find(post.blogId);
         if (!blog) {
             return null;
         }

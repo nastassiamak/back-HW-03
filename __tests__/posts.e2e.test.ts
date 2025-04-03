@@ -6,6 +6,7 @@ import {SETTINGS} from "../src/setting";
 import {blogsCollection, disconnectDb, postsCollection, runDb} from "../src/db/mongoDb";
 import {MongoClient, ObjectId} from "mongodb";
 import {MongoMemoryServer} from "mongodb-memory-server";
+import {postsRepository} from "../src/features/posts/postsRepository";
 
 
 describe('/posts', () => {
@@ -26,7 +27,8 @@ describe('/posts', () => {
     });
     beforeEach(async () => {
         //await blogsCollection.insertMany(dataset1.blogs); // добавление блогов перед каждым тестом
-        //await blogsCollection.insertMany(dataset2.blogs); //
+        // await blogsCollection.insertMany(dataset2.blogs); //
+        // await postsCollection.insertMany(dataset2.posts)
         //await blogsCollection.deleteMany({}); // Очищаем коллекцию блогов
         await postsCollection.deleteMany({}); // Очищаем коллекцию постов
     });
@@ -114,7 +116,7 @@ describe('/posts', () => {
     })
 
     it('should  get empty array', async () => {
-        //await postsCollection.deleteMany({});
+        await postsCollection.deleteMany({});
 
         const res = await req
             .get(SETTINGS.PATH.POSTS)
@@ -122,8 +124,9 @@ describe('/posts', () => {
 
         console.log(res.body)
 
-        const postsInDb = await postsCollection.find( {projection: {_id: 0}}).toArray();
+        const postsInDb = await postsCollection.find().toArray();
         expect(postsInDb.length).toEqual(0);
+
 
 
     })

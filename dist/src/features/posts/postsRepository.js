@@ -64,7 +64,8 @@ exports.postsRepository = {
     },
     getAll() {
         return __awaiter(this, void 0, void 0, function* () {
-            return yield mongoDb_1.postsCollection.find({}, { projection: { _id: 0 } }).toArray();
+            const posts = yield mongoDb_1.postsCollection.find({}, { projection: { _id: 0 } }).toArray();
+            return posts.map(post => (Object.assign(Object.assign({}, post), { id: post.id })));
         });
     },
     del(id) {
@@ -75,7 +76,7 @@ exports.postsRepository = {
     },
     put(post, id) {
         return __awaiter(this, void 0, void 0, function* () {
-            const blog = yield blogsRepository_1.blogsRepository.find(post.blogId.toString());
+            const blog = yield blogsRepository_1.blogsRepository.find(post.blogId);
             if (!blog) {
                 return null;
             }
