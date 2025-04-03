@@ -11,7 +11,6 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.blogsRepository = void 0;
 const mongoDb_1 = require("../../db/mongoDb"); // Подключите к своей коллекции
-const mongodb_1 = require("mongodb");
 exports.blogsRepository = {
     create(blog) {
         return __awaiter(this, void 0, void 0, function* () {
@@ -20,7 +19,7 @@ exports.blogsRepository = {
             }
             // Генерация объекта нового блога с id
             const newBlog = {
-                id: new mongodb_1.ObjectId().toString(),
+                id: new Date().toString() + Math.random().toString(),
                 name: blog.name,
                 description: blog.description,
                 websiteUrl: blog.websiteUrl,

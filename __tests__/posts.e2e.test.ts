@@ -160,7 +160,7 @@ describe('/posts', () => {
 
 
     it('should find', async () => {
-
+       // await blogsCollection.insertMany(dataset2.blogs)
         await postsCollection.insertMany(dataset2.posts);
 
         const res = await req
