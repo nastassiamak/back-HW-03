@@ -36,9 +36,9 @@ describe('/posts', () => {
        await postsCollection.insertMany(dataset2.posts)
         const newPost = {
             id: new Date().toISOString() +Math.random().toString(),
-            title: 't1',
-            shortDescription: 's1',
-            content: 'c1',
+            title: 't11',
+            shortDescription: 's11',
+            content: 'c11',
             blogId: dataset2.blogs[0].id,
             blogName: dataset2.blogs[0].name,
             createdPost: new Date().toISOString(),

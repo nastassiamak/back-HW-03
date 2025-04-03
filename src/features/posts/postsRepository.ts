@@ -1,20 +1,17 @@
 import {PostInputModel, PostViewModel} from "../../input-output-type/post_type";
 import {PostDBType} from "../../db/post-db-type";
 import {blogsRepository} from "../blogs/blogsRepository";
-import {db} from "../../db/db";
-import {blogsCollection, postsCollection} from "../../db/mongoDb";
+import {postsCollection} from "../../db/mongoDb";
 import {ObjectId} from "mongodb";
-import {BlogInputModel} from "../../input-output-type/blog_type";
-import {BlogBbType} from "../../db/blog-db-type";
 
 export const postsRepository = {
-    async create(post: PostInputModel) {
+    async create(post: PostInputModel): Promise<PostDBType> {
         // Сначала находим блог, чтобы получить его название
         const blog = await blogsRepository.find(post.blogId);
         const blogName = blog ? blog.name : "Неизвестный блог"; // Устанавливаем имя блога
 
         // Создаем новый пост с необходимыми полями
-        const newPost = {
+        const newPost: PostDBType= {
             id: new Date().toISOString() + Math.random().toString(), // Генерация уникального идентификатора
             title: post.title,
             content: post.content,
@@ -26,8 +23,9 @@ export const postsRepository = {
 
         // Пытаемся вставить новый пост в коллекцию
         try {
-            const res = await postsCollection.insertOne(newPost); // Вставка в коллекцию
-            const createdPost: PostDBType = {
+            await postsCollection.insertOne(newPost); // Вставка в коллекцию
+
+            return {
                 id: newPost.id,
                 title: newPost.title,
                 content: newPost.content,
@@ -35,8 +33,7 @@ export const postsRepository = {
                 blogId: newPost.blogId,
                 blogName: newPost.blogName,
                 createdAt: newPost.createdAt, // Сохраняем дату создания
-            };
-            return createdPost; // Возвращаем созданный пост
+            }; // Возвращаем созданный пост
         } catch (error) {
             console.error('Error inserting new post:', error);
             throw new Error('Failed to create post'); // Обработка ошибок

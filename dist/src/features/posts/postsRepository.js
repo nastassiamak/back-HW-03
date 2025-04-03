@@ -30,8 +30,8 @@ exports.postsRepository = {
             };
             // Пытаемся вставить новый пост в коллекцию
             try {
-                const res = yield mongoDb_1.postsCollection.insertOne(newPost); // Вставка в коллекцию
-                const createdPost = {
+                yield mongoDb_1.postsCollection.insertOne(newPost); // Вставка в коллекцию
+                return {
                     id: newPost.id,
                     title: newPost.title,
                     content: newPost.content,
@@ -39,8 +39,7 @@ exports.postsRepository = {
                     blogId: newPost.blogId,
                     blogName: newPost.blogName,
                     createdAt: newPost.createdAt, // Сохраняем дату создания
-                };
-                return createdPost; // Возвращаем созданный пост
+                }; // Возвращаем созданный пост
             }
             catch (error) {
                 console.error('Error inserting new post:', error);
