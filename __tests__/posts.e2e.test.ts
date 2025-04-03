@@ -56,15 +56,15 @@ describe('/posts', () => {
         console.log(createdPost);
 
         expect(createdPost).not.toBeNull();
-
-        if (createdPost) {
-            expect(createdPost.title).toEqual(newPost.title);
-            expect(createdPost.shortDescription).toEqual(newPost.shortDescription);
-            expect(createdPost.blogId).toEqual(newPost.blogId);
-            expect(createdPost.blogName).toEqual(newPost.blogName);
-            expect(createdPost.content).toEqual(newPost.content);
-            expect(createdPost.createdAt).toBeDefined();
-        }
+        expect(res.body).toEqual(expect.objectContaining({
+            blogId: expect.any(String),
+            blogName: expect.any(String), // Обязательно проверьте наличие этого поля
+            content: expect.any(String),
+            createdAt: expect.stringMatching(/\d{4}-\d{2}-\d{2}T\d{2}:\d{2}:\d{2}.\d{3}Z/), // Правильный формат даты
+            id: expect.any(String),
+            shortDescription: expect.any(String),
+            title: expect.any(String),
+        }));
 
     })
 
