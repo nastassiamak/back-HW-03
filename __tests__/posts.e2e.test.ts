@@ -36,6 +36,7 @@ describe('/posts', () => {
 
     it('should create', async () => {
        await blogsCollection.insertMany(dataset2.blogs);
+       await postsCollection.insertMany(dataset2.posts)
         const newPost: PostInputModel = {
             title: 't1',
             shortDescription: 's1',

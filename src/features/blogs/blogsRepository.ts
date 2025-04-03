@@ -11,7 +11,7 @@ export const blogsRepository = {
 
         // Генерация объекта нового блога с id
         const newBlog ={
-            id: new ObjectId().toString(),
+            id: new Date().toString() + Math.random().toString(),
             name: blog.name,
             description: blog.description,
             websiteUrl: blog.websiteUrl,
