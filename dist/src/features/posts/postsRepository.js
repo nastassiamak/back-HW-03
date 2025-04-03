@@ -18,7 +18,7 @@ exports.postsRepository = {
             const blog = yield blogsRepository_1.blogsRepository.find(post.blogId);
             const blogName = blog ? blog.name : "Неизвестный блог"; // Поверяем и устанавливаем значение по умолчанию
             const newPost = {
-                id: new Date().toString() + Math.random().toString(),
+                id: new Date().toISOString() + Math.random().toString(),
                 title: post.title,
                 content: post.content,
                 shortDescription: post.shortDescription,
@@ -47,7 +47,8 @@ exports.postsRepository = {
     },
     find(id) {
         return __awaiter(this, void 0, void 0, function* () {
-            return yield mongoDb_1.postsCollection.findOne({ id }, { projection: { _id: 0 } });
+            const post = yield mongoDb_1.postsCollection.findOne({ id: id }, { projection: { _id: 0 } });
+            return post ? Object.assign(Object.assign({}, post), { id: post.id }) : null;
         });
     },
     findByUUID(_id) {
@@ -79,12 +80,12 @@ exports.postsRepository = {
             if (!blog) {
                 return null;
             }
-            const result = yield mongoDb_1.postsCollection.updateOne({ id }, { $set: post });
+            const result = yield mongoDb_1.postsCollection.updateOne({ id: id }, { $set: post });
             return result.modifiedCount ? { id } : null;
         });
     },
     map(post) {
-        const postForOutput = {
+        return {
             id: post.id,
             title: post.title,
             shortDescription: post.shortDescription,
@@ -93,6 +94,5 @@ exports.postsRepository = {
             blogName: post.blogName,
             createdAt: post.createdAt,
         };
-        return postForOutput;
     },
 };

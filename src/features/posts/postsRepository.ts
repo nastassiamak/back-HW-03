@@ -12,7 +12,7 @@ export const postsRepository = {
         const blog = await blogsRepository.find(post.blogId);
         const blogName = blog ? blog.name : "Неизвестный блог"; // Поверяем и устанавливаем значение по умолчанию
         const newPost  = {
-            id: new Date().toString() + Math.random().toString(),
+            id: new Date().toISOString() + Math.random().toString(),
             title: post.title,
             content: post.content,
             shortDescription: post.shortDescription,

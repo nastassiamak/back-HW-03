@@ -26,10 +26,7 @@ describe('/posts', () => {
 
     });
     beforeEach(async () => {
-        //await blogsCollection.insertMany(dataset1.blogs); // добавление блогов перед каждым тестом
-        // await blogsCollection.insertMany(dataset2.blogs); //
-        // await postsCollection.insertMany(dataset2.posts)
-        //await blogsCollection.deleteMany({}); // Очищаем коллекцию блогов
+       // await blogsCollection.deleteMany({})
         await postsCollection.deleteMany({}); // Очищаем коллекцию постов
     });
 
@@ -37,11 +34,14 @@ describe('/posts', () => {
     it('should create', async () => {
        await blogsCollection.insertMany(dataset2.blogs);
        await postsCollection.insertMany(dataset2.posts)
-        const newPost: PostInputModel = {
+        const newPost = {
+            id: new Date().toISOString() +Math.random().toString(),
             title: 't1',
             shortDescription: 's1',
             content: 'c1',
             blogId: dataset2.blogs[0].id,
+            blogName: dataset2.blogs[0].name,
+            createdPost: new Date().toISOString(),
         }
 
         const res = await req
@@ -209,7 +209,7 @@ describe('/posts', () => {
 
     })
     it('should update a post by id', async () => {
-        await postsCollection.insertMany(dataset2.posts); // Добавляем начальные данные
+       await postsCollection.insertMany(dataset2.posts); // Добавляем начальные данные
 
         const updatedPost = {
             title: 't2',
