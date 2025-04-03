@@ -44,7 +44,7 @@ export const postsRepository = {
 
 
     async find(id: string) {
-        return await postsCollection.findOne({id})
+        return await postsCollection.findOne({id}, {projection: {_id: 0}});
     },
 
     async findByUUID(_id: ObjectId) {
@@ -57,7 +57,7 @@ export const postsRepository = {
     },
 
     async getAll(){
-        return await postsCollection.find({}).toArray();
+        return await postsCollection.find({}, {projection: {_id: 0}}).toArray();
     },
 
     async del(id: string) {
