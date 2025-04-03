@@ -48,7 +48,7 @@ exports.postsRepository = {
     },
     find(id) {
         return __awaiter(this, void 0, void 0, function* () {
-            return yield mongoDb_1.postsCollection.findOne({ id });
+            return yield mongoDb_1.postsCollection.findOne({ id }, { projection: { _id: 0 } });
         });
     },
     findByUUID(_id) {
@@ -64,7 +64,7 @@ exports.postsRepository = {
     },
     getAll() {
         return __awaiter(this, void 0, void 0, function* () {
-            return yield mongoDb_1.postsCollection.find({}).toArray();
+            return yield mongoDb_1.postsCollection.find({}, { projection: { _id: 0 } }).toArray();
         });
     },
     del(id) {

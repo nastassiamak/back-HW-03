@@ -33,12 +33,12 @@ describe('/posts', () => {
 
 
     it('should create', async () => {
-       await blogsCollection.insertMany(dataset1.blogs);
+       await blogsCollection.insertMany(dataset2.blogs);
         const newPost: PostInputModel = {
             title: 't1',
             shortDescription: 's1',
             content: 'c1',
-            blogId: dataset1.blogs[0].id,
+            blogId: dataset2.blogs[0].id,
         }
 
         const res = await req
@@ -48,16 +48,20 @@ describe('/posts', () => {
             .expect(HTTP_STATUSES.CREATED_201)
 
         console.log(res.body)
-        // Проверка, что пост соответствует ожидаемым значениям
-        expect(res.body).toEqual({
-            blogId: expect.any(String),
-            blogName: expect.any(String), // Предполагается, что блог возвращается
-            content: expect.any(String),
-            createdAt: expect.any(String), // Игнорируем формат
-            id: expect.any(String),
-            shortDescription: expect.any(String),
-            title: expect.any(String),
-        });
+
+        const createdPost = await postsCollection.findOne({id: res.body.id},{projection: {_id: 0}});
+        console.log(createdPost);
+
+        expect(createdPost).not.toBeNull();
+
+        if (createdPost) {
+            expect(createdPost.title).toEqual(newPost.title);
+            expect(createdPost.shortDescription).toEqual(newPost.shortDescription);
+            expect(createdPost.blogId).toEqual(newPost.blogId);
+            expect(createdPost.content).toEqual(newPost.content);
+            expect(createdPost.createdAt).toBeDefined();
+        }
+
     })
 
     it('shouldn\'t create 401', async () => {
