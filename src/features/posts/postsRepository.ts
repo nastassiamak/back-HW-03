@@ -57,7 +57,8 @@ export const postsRepository = {
     },
 
     async getAll(){
-        return await postsCollection.find({}, {projection: {_id: 0}}).toArray();
+        const posts = await postsCollection.find({}, {projection: {_id: 0}}).toArray();
+        return posts.map(post => ({ ...post, id: post.id }));
     },
 
     async del(id: string) {

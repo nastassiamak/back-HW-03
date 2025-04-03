@@ -70,7 +70,6 @@ return createdBlog; // Возвращаем созданный блог
     map(blog: BlogBbType): BlogViewModel {
         return {
             id: blog.id,
-
             name: blog.name,
             description: blog.description,
             websiteUrl: blog.websiteUrl,
