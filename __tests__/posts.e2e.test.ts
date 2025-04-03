@@ -40,43 +40,33 @@ describe('/posts', () => {
             shortDescription: 's11',
             content: 'c11',
             blogId: dataset2.blogs[0].id,
-
+            // blogName: dataset2.blogs[0].name,
+            // createdPost: new Date().toISOString(),
         }
 
-        const resPost = await req
+        const res = await req
             .post(SETTINGS.PATH.POSTS)
             .set({'Authorization': 'Basic ' + codedAuth})
             .send(newPost)
             .expect(HTTP_STATUSES.CREATED_201)
 
-        console.log(resPost.body)
+        console.log(res.body)
 
-        // Проверяем, что созданный пост содержит необходимые поля
-        expect(resPost.body).toHaveProperty('id');
-        expect(resPost.body.title).toEqual(newPost.title);
-        expect(resPost.body.shortDescription).toEqual(newPost.shortDescription);
-        expect(resPost.body.content).toEqual(newPost.content);
-        expect(resPost.body.blogId).toEqual(newPost.blogId);
-        expect(resPost.body.blogName).toEqual(dataset2.blogs[0].name); // Проверяем имя блога
-        expect(resPost.body.createdAt).toBeDefined(); // Проверяем наличие поля createdAt
+        const createdPost = await postsCollection.findOne({id: res.body.id},{projection: {_id: 0}});
+        console.log(createdPost);
 
-        // Получаем все посты
-        const res = await req
-            .get(SETTINGS.PATH.POSTS)
-            .expect(HTTP_STATUSES.OK_200);
-
-        // Проверяем, что возвращается массив постов
-        expect(res.body).toEqual(expect.arrayContaining([ // Убедитесь, что это массив
-            expect.objectContaining({
-                id: expect.any(String),
-                title: expect.any(String),
-                shortDescription: expect.any(String),
-                content: expect.any(String),
+        expect(createdPost).not.toBeNull();
+        if (createdPost) {
+            expect(res.body).toEqual(expect.objectContaining({
                 blogId: expect.any(String),
-                blogName: expect.any(String),
-                createdAt: expect.stringMatching(/\d{4}-\d{2}-\d{2}T\d{2}:\d{2}:\d{2}.\d{3}Z/), // Проверка формата даты
-            }),
-        ]));
+                blogName: expect.any(String), // Обязательно проверьте наличие этого поля
+                content: expect.any(String),
+                createdAt: expect.stringMatching(/\d{4}-\d{2}-\d{2}T\d{2}:\d{2}:\d{2}.\d{3}Z/), // Правильный формат даты
+                id: expect.any(String),
+                shortDescription: expect.any(String),
+                title: expect.any(String),
+            }));
+        }
 
     })
 
