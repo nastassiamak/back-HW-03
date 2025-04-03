@@ -6,7 +6,7 @@ import {HTTP_STATUSES} from "../../../db/db";
 export const findPostController = async (req: Request<{id:string}>,
                                    res: Response <PostViewModel>) => {
     const { id } = req.params;
-    const post = await postsRepository.find(id)
+    const post: PostViewModel | null = await postsRepository.find(id)
     if (!post) {
         res
             .sendStatus(HTTP_STATUSES.NOT_FOUND_404)
