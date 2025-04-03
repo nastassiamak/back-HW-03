@@ -13,9 +13,14 @@ exports.getPostsController = void 0;
 const postsRepository_1 = require("../postsRepository");
 const db_1 = require("../../../db/db");
 const getPostsController = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
-    const posts = yield postsRepository_1.postsRepository.getAll();
-    res
-        .status(db_1.HTTP_STATUSES.OK_200)
-        .json(posts);
+    const posts = yield postsRepository_1.postsRepository.getAll(); // получаем базы данных
+    if (!posts) {
+        res.status(db_1.HTTP_STATUSES.NOT_FOUND_404);
+    }
+    else {
+        res
+            .status(db_1.HTTP_STATUSES.OK_200)
+            .json(posts); // отдаём видео в качестве ответа
+    }
 });
 exports.getPostsController = getPostsController;

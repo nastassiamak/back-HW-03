@@ -43,8 +43,9 @@ export const postsRepository = {
     },
 
 
-    async find(id: string) {
-        return await postsCollection.findOne({id}, {projection: {_id: 0}});
+    async find(id: string): Promise<PostDBType | null> {
+        const post = await postsCollection.findOne({id: id}, {projection: {_id: 0}});
+        return post ? {...post, id: post.id} : null
     },
 
     async findByUUID(_id: ObjectId) {
@@ -56,27 +57,27 @@ export const postsRepository = {
         return post ? this.map(post) : undefined
     },
 
-    async getAll(){
+    async getAll(): Promise<PostDBType[]> {
         const posts = await postsCollection.find({}, {projection: {_id: 0}}).toArray();
         return posts.map(post => ({ ...post, id: post.id }));
     },
 
-    async del(id: string) {
+    async del(id: string): Promise<{id: string} | null> {
         const result = await postsCollection.deleteOne({id})
         return result.deletedCount ? {id}: null
     },
 
-    async put(post: PostInputModel, id: string) {
+    async put(post: PostInputModel, id: string):Promise<{ id: string } | null> {
         const blog = await blogsRepository.find(post.blogId);
         if (!blog) {
             return null;
         }
-        const result = await postsCollection.updateOne({id}, {$set: post });
+        const result = await postsCollection.updateOne({id: id}, {$set: post });
         return result.modifiedCount ? {id}: null
     },
 
-    map(post: PostDBType) {
-        const postForOutput: PostViewModel = {
+    map(post: PostDBType): PostViewModel {
+        return  {
             id: post.id,
             title: post.title,
             shortDescription: post.shortDescription,
@@ -85,6 +86,6 @@ export const postsRepository = {
             blogName: post.blogName,
             createdAt: post.createdAt,
         }
-        return postForOutput
+
     },
 }
