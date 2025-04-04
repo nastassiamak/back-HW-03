@@ -40,8 +40,8 @@ describe('/posts', () => {
             shortDescription: 's1',
             content: 'c1',
             blogId: dataset2.blogs[0].id,
-            // blogName: dataset2.blogs[0].name,
-            // createdPost: new Date().toISOString(),
+            blogName: dataset2.blogs[0].name,
+            createdPost: new Date().toISOString(),
         }
 
         const res = await req
@@ -61,9 +61,9 @@ describe('/posts', () => {
             expect(createdPost.title).toEqual(newPost.title);
             expect(createdPost.shortDescription).toEqual(newPost.shortDescription);
             expect(createdPost.blogId).toEqual(newPost.blogId);
-           // expect(createdPost.blogName).toEqual(newPost.blogName);
+            expect(createdPost.blogName).toEqual(newPost.blogName);
             expect(createdPost.content).toEqual(newPost.content);
-            //expect(createdPost.createdAt).toBeDefined();
+            expect(createdPost.createdAt).toBeDefined();
         }
         console.log(createdPost);
 

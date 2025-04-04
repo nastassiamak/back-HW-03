@@ -82,7 +82,7 @@ export const postsRepository = {
             content: post.content,
             blogId: post.blogId,
             blogName: post.blogName,
-            createdAt: post.createdAt,
+            createdAt: new Date(post.createdAt).toISOString(),
         }
 
     },
