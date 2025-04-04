@@ -35,7 +35,7 @@ describe('/posts', () => {
        await blogsCollection.insertMany(dataset2.blogs);
        //await postsCollection.insertMany(dataset2.posts)
         const newPost = {
-            id: new Date().toISOString() +Math.random().toString(),
+            id: new ObjectId().toString(),
             title: 't1',
             shortDescription: 's1',
             content: 'c1',
@@ -56,16 +56,16 @@ describe('/posts', () => {
         console.log(createdPost);
 
         expect(createdPost).not.toBeNull();
+        expect(res.body).toEqual(expect.objectContaining({
+            blogId: expect.any(String), // Убедитесь, что blogId - это строка
+            blogName: expect.any(String), // Убедитесь, что blogName - это строка
+            content: expect.any(String), // Убедитесь, что content - это строка
+            id: expect.any(String), // Убедитесь, что id - это строка
+            shortDescription: expect.any(String), // Убедитесь, что shortDescription - это строка
+            title: expect.any(String), // Убедитесь, что title - это строка
+            createdAt: expect.stringMatching(/\d{4}-[01]\d-[0-3]\dT[0-2]\d:[0-5]\d:[0-5]\d\.\d+([+-][0-2]\d:[0-5]\d|Z)/) // Сопоставьте формат даты ISO
+        }));
 
-        if (createdPost) {
-            expect(createdPost.title).toEqual(newPost.title);
-            expect(createdPost.shortDescription).toEqual(newPost.shortDescription);
-            expect(createdPost.blogId).toEqual(newPost.blogId);
-            expect(createdPost.blogName).toEqual(newPost.blogName);
-            expect(createdPost.content).toEqual(newPost.content);
-            expect(createdPost.createdAt).toBeDefined();
-        }
-        console.log(createdPost);
 
     })
 

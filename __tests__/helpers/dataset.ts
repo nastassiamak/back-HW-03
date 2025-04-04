@@ -22,7 +22,7 @@ export const createString = (length: number) => {
 
 
 export const blog1: BlogBbType = {
-    id: new Date().toISOString() + Math.random().toString(),
+    id: new ObjectId().toString(),
 
     name: 'n11',
     description: 'd11',
@@ -32,7 +32,7 @@ export const blog1: BlogBbType = {
 } as const // dataset нельзя изменять
 
 export const blog5: BlogBbType = {
-    id: new Date().toISOString() + Math.random().toString(),
+    id: new ObjectId().toString(),
 
     name: 'name5',
     description: 'description5',
@@ -42,7 +42,7 @@ export const blog5: BlogBbType = {
 } as const // dataset нельзя изменять
 
 export const blog6: BlogBbType = {
-    id: new Date().toISOString() + Math.random().toString(),
+    id: new ObjectId().toString(),
 
     name: 'name6',
     description: 'description6',
@@ -52,7 +52,7 @@ export const blog6: BlogBbType = {
 } as const // dataset нельзя изменять
 
 export const post1: PostDBType ={
-    id: new Date().toISOString() + Math.random().toString(),
+    id: new ObjectId().toString(),
     title: 't1',
     shortDescription: 's1',
     content: 'c1',
@@ -62,7 +62,7 @@ export const post1: PostDBType ={
 
 }
 export const post2: PostDBType ={
-    id: new Date().toISOString() + Math.random().toString(),
+    id: new ObjectId().toString(),
     title: 't2',
     shortDescription: 's2',
     content: 'c2',

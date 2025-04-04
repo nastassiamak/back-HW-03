@@ -12,7 +12,7 @@ export const postsRepository = {
 
         // Создаем новый пост с необходимыми полями
         const newPost: PostDBType= {
-            id: new Date().toISOString() + Math.random().toString(), // Генерация уникального идентификатора
+            id: new ObjectId().toString(),
             title: post.title,
             content: post.content,
             shortDescription: post.shortDescription,
@@ -82,7 +82,7 @@ export const postsRepository = {
             content: post.content,
             blogId: post.blogId,
             blogName: post.blogName,
-            createdAt: new Date(post.createdAt).toISOString(),
+            createdAt: post.createdAt,
         }
 
     },
