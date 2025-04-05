@@ -12,6 +12,7 @@ Object.defineProperty(exports, "__esModule", { value: true });
 exports.postsRepository = void 0;
 const blogsRepository_1 = require("../blogs/blogsRepository");
 const mongoDb_1 = require("../../db/mongoDb");
+const mongodb_1 = require("mongodb");
 exports.postsRepository = {
     create(post) {
         return __awaiter(this, void 0, void 0, function* () {
@@ -20,7 +21,7 @@ exports.postsRepository = {
             const blogName = blog ? blog.name : "Неизвестный блог"; // Устанавливаем имя блога
             // Создаем новый пост с необходимыми полями
             const newPost = {
-                id: new Date().toISOString() + Math.random().toString(), // Генерация уникального идентификатора
+                id: new mongodb_1.ObjectId().toString(),
                 title: post.title,
                 content: post.content,
                 shortDescription: post.shortDescription,

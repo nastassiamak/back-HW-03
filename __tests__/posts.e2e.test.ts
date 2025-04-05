@@ -39,8 +39,8 @@ describe('/posts', () => {
             title: 't1',
             shortDescription: 's1',
             content: 'c1',
-            blogId: dataset2.blogs[0].id.toString(),
-            blogName: dataset2.blogs[0].name.toString(),
+            blogId: dataset2.blogs[0].id,
+            blogName: dataset2.blogs[0].name,
             createdPost: new Date().toISOString(),
         }
 
