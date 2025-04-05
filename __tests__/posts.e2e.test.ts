@@ -39,8 +39,8 @@ describe('/posts', () => {
             title: 't1',
             shortDescription: 's1',
             content: 'c1',
-            blogId: dataset2.blogs[0].id,
-            blogName: dataset2.blogs[0].name,
+            blogId: dataset2.blogs[0].id.toString(),
+            blogName: dataset2.blogs[0].name.toString(),
             createdPost: new Date().toISOString(),
         }
 
@@ -71,6 +71,7 @@ describe('/posts', () => {
 
     it('shouldn\'t create 401', async () => {
         await postsCollection.deleteMany({});
+
 
         const newPost: PostInputModel = {
             title: 't1',
